@@ -24,12 +24,13 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
+	mv $(TARGET) ../$(TARGET)
 
 clean:
 	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(TARGET)
+	$(RM) ../$(TARGET)
 
 re: clean fclean all
 
