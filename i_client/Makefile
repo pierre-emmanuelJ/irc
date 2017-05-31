@@ -5,14 +5,14 @@
 ## Login   <pichar_v@epitech.eu>
 ##
 ## Started on  Wed Jan  4 09:07:13 2017 Valentin Pichard
-## Last update Wed May 31 16:43:43 2017 Pierre-Emmanuel Jacquier
+## Last update Wed May 31 18:37:29 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
 
 RM = rm -rf
 
-TARGET = ../client
+TARGET = client
 
 CFLAGS	= -Wall -Wextra -Werror -g
 
