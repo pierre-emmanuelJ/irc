@@ -1,36 +1,24 @@
 ##
-## Makefile for  in /home/jacqui_p/rendu/PSU_2016_myirc/
+## white_rabbit.c for  in /Users/pichar_v/Documents/tek2/cpp_d01/ex00/
 ##
-## Made by Pierre-Emmanuel Jacquier
-## Login   <jacqui_p@epitech.eu>
+## Made by Valentin Pichard
+## Login   <pichar_v@epitech.eu>
 ##
-## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Wed May 31 15:10:09 2017 Pierre-Emmanuel Jacquier
+## Started on  Wed Jan  4 09:07:13 2017 Valentin Pichard
+## Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
 ##
 
-CC = gcc
-
-RM = rm -rf
-
-TARGET = server
-
-CFLAGS	= -Wall -Wextra -Werror -g
-
-SRC	= main.c \
-      server.c
-
-OBJS = $(SRC:.c=.o)
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
+all:
+	make -C client
+	make -C server
 
 clean:
-	$(RM) $(OBJS)
+	make clean -C client
+	make clean -C server
 
-fclean: clean
-	$(RM) $(TARGET)
+fclean:
+	make fclean -C client
+	make fclean -C server
 
 re: clean fclean all
 
