@@ -5,14 +5,14 @@
 ## Login   <jacqui_p@epitech.eu>
 ##
 ## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Wed May 31 15:10:09 2017 Pierre-Emmanuel Jacquier
+## Last update Wed May 31 16:43:50 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
 
 RM = rm -rf
 
-TARGET = server
+TARGET = ../server
 
 CFLAGS	= -Wall -Wextra -Werror -g
 
