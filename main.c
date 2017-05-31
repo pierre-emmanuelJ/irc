@@ -5,20 +5,20 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 15:21:44 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 15:24:42 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "myirc.h"
 
-static int      is_number(char *number)
+static BOOL      is_number(char *number)
 {
   while (*number)
   {
     if (!isdigit(*number))
-      return (0);
+      return (FALSE);
     number++;
   }
-  return (1);
+  return (TRUE);
 }
 
 static BOOL      server_main_loop(t_server_infos *server_infos)
