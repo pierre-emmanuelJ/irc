@@ -5,10 +5,23 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 15:24:42 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 18:33:00 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
+
+void             *vmalloc(size_t size)
+{
+  void           *mem;
+
+  mem = malloc(size);
+  if (!mem)
+  {
+    perror("malloc failed");
+    exit (EXIT_FAILURE);
+  }
+  return (mem);
+}
 
 static BOOL      is_number(char *number)
 {
@@ -23,7 +36,16 @@ static BOOL      is_number(char *number)
 
 static BOOL      server_main_loop(t_server_infos *server_infos)
 {
+  t_client_infos clients[MAX_CLI];
+  struct pollfd  fds[MAX_CLI];
+  t_circular_buf *cbuf;
+
+  cbuf = create_circular_buf();
+  init_circular_buf(cbuf);
+  (void)fds;
+  (void)clients;
   (void)server_infos;
+
   return (TRUE);
 }
 

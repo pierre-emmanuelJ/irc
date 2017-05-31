@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 17:56:40 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 18:34:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -61,6 +61,7 @@ typedef struct          s_circular_buf
 {
   char                  *rfc_msg;
   int                   client_fd;
+  BOOL                  is_empty;
   struct s_circular_buf *next;
 }                       t_circular_buf;
 
@@ -85,5 +86,16 @@ typedef struct          s_client_infos
 */
 BOOL     create_socket(t_server_infos *server_infos);
 BOOL     server_listen(t_server_infos *server_infos);
+
+/*
+** init circular buffer
+*/
+t_circular_buf *create_circular_buf(void);
+void           init_circular_buf(t_circular_buf *cbuf);
+
+/*
+** malloc memory verification
+*/
+void           *vmalloc(size_t size);
 
 #endif /* !MYIRC_H_ */

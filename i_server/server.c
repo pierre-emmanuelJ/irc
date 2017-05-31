@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 17:04:36 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 18:21:02 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -34,7 +34,7 @@ BOOL     create_socket(t_server_infos *server_infos)
 
 BOOL     server_listen(t_server_infos *server_infos)
 {
-  if (listen(server_infos->fd, MAX_QUEU))
+  if (listen(server_infos->fd, MAX_CLI))
   {
     if (close(server_infos->fd) == -1)
       return (FALSE);
