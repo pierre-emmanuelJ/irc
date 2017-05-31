@@ -5,7 +5,7 @@
 ## Login   <jacqui_p@epitech.eu>
 ##
 ## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Wed May 24 14:04:13 2017 Pierre-Emmanuel Jacquier
+## Last update Wed May 31 15:10:09 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
@@ -16,7 +16,8 @@ TARGET = server
 
 CFLAGS	= -Wall -Wextra -g
 
-SRC	= main.c
+SRC	= main.c \
+      server.c
 
 OBJS = $(SRC:.c=.o)
 
