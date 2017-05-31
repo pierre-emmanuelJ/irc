@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 16:55:55 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 17:56:40 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -31,7 +31,7 @@
 */
 # define _GNU_SOURCE
 
-# define MAX_QUEU 42
+# define MAX_CLI 1024
 # define NB_CMD 15
 # define BOOL t_bool
 
@@ -57,6 +57,18 @@ typedef struct          s_server_infos
   int                   port;
 }                       t_server_infos;
 
+typedef struct          s_circular_buf
+{
+  char                  *rfc_msg;
+  int                   client_fd;
+  struct s_circular_buf *next;
+}                       t_circular_buf;
+
+typedef struct          s_chanel
+{
+  char                  *chanel_name;
+}                       t_chanel;
+
 typedef struct          s_client_infos
 {
   struct sockaddr_in    s_in_client;
@@ -64,6 +76,8 @@ typedef struct          s_client_infos
   int                   client_fd;
   char                  *client_ip;
   int                   client_port;
+  t_chanel              *chanel;
+  struct pollfd         *fds;
 }                       t_client_infos;
 
 /*

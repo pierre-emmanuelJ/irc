@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 16:55:16 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 17:04:36 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -44,7 +44,7 @@ BOOL     server_listen(t_server_infos *server_infos)
 }
 
 BOOL     server_accept(t_client_infos *client_infos,
-                      t_server_infos *server_infos)
+                       t_server_infos *server_infos)
 {
   client_infos->client_fd = accept(server_infos->fd,
                             (struct sockaddr *)&client_infos->s_in_client,
