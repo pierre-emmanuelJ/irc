@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 15:21:28 2017 Pierre-Emmanuel Jacquier
+** Last update Wed May 31 15:27:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -56,5 +56,11 @@ typedef struct          s_server_infos
   struct sockaddr_in    s_in;
   int                   port;
 }                       t_server_infos;
+
+/*
+** server utiles
+*/
+BOOL     create_socket(t_server_infos *server_infos);
+BOOL     server_listen(t_server_infos *server_infos);
 
 #endif /* !MYIRC_H_ */
