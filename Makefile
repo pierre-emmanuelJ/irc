@@ -9,16 +9,16 @@
 ##
 
 all:
-	make -C client
-	make -C server
+	make -C i_client
+	make -C i_server
 
 clean:
-	make clean -C client
-	make clean -C server
+	make clean -C i_client
+	make clean -C i_server
 
 fclean:
-	make fclean -C client
-	make fclean -C server
+	make fclean -C i_client
+	make fclean -C i_server
 
 re: clean fclean all
 
