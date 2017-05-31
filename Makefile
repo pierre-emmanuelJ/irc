@@ -14,7 +14,7 @@ RM = rm -rf
 
 TARGET = server
 
-CFLAGS	= -Wall -Wextra -g
+CFLAGS	= -Wall -Wextra -Werror -g
 
 SRC	= main.c \
       server.c
