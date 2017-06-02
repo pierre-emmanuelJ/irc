@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  1 16:32:16 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  2 14:36:31 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -87,6 +87,8 @@ typedef struct          s_client_infos
 */
 BOOL     create_socket(t_server_infos *server_infos);
 BOOL     server_listen(t_server_infos *server_infos);
+BOOL     server_accept(t_client_infos *client_infos,
+                       t_server_infos *server_infos);
 
 /*
 ** init circular buffer

@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  1 16:32:51 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  2 14:42:21 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -39,7 +39,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
   t_client_infos clients[MAX_CLI];
   struct pollfd  fds[MAX_CLI];
   t_circular_buf *cbuf;
+  int            i;
 
+  i = 0;
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
   (void)fds;
@@ -47,7 +49,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
   (void)server_infos;
   while (1)
   {
-    sleep(1);
+    server_accept(&clients[i], server_infos);
+    printf("test new client %d\n", i);
+    i++;
   }
   free(cbuf);
   return (TRUE);
