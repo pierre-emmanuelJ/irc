@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 18:34:07 2017 Pierre-Emmanuel Jacquier
+** Last update Thu Jun  1 16:32:16 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -31,6 +31,7 @@
 */
 # define _GNU_SOURCE
 
+# define FAILURE 84
 # define MAX_CLI 1024
 # define NB_CMD 15
 # define BOOL t_bool

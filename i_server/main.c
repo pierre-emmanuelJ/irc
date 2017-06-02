@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 19:17:30 2017 Pierre-Emmanuel Jacquier
+** Last update Thu Jun  1 16:32:51 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -18,7 +18,7 @@ void             *vmalloc(size_t size)
   if (!mem)
   {
     perror("malloc failed");
-    exit (EXIT_FAILURE);
+    exit (FAILURE);
   }
   return (mem);
 }
@@ -45,9 +45,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
   (void)fds;
   (void)clients;
   (void)server_infos;
-  for (int i = 0; i < MAX_CLI; i++)
+  while (1)
   {
-    printf("%d\n", cbuf[i].client_fd);
+    sleep(1);
   }
   free(cbuf);
   return (TRUE);
@@ -71,13 +71,13 @@ int                     main(int argc, char **argv)
   if (argc != 2 || !is_number(argv[1]))
   {
     printf("USAGE: ./server port\n");
-    return (1);
+    return (FAILURE);
   }
   server_infos.port = atoi(argv[1]);
   if (!commons(&server_infos))
   {
     fprintf(stderr, "%s\n", strerror(errno));
-    return (1);
+    return (FAILURE);
   }
   return (0);
 }
