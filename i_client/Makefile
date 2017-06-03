@@ -14,7 +14,7 @@ RM = rm -rf
 
 TARGET = client
 
-CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS	= -Wall -Wextra -Werror -g -lncurses
 
 SRC	= main.c
 

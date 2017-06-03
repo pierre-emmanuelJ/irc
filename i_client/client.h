@@ -1,66 +1,17 @@
 /*
-** myirc.h for  in /home/jacqui_p/rendu/PSU_2016_myirc/
+** white_rabbit.c for  in /Users/pichar_v/Documents/tek2/cpp_d01/ex00/
 **
-** Made by Pierre-Emmanuel Jacquier
-** Login   <jacqui_p@epitech.eu>
+** Made by Valentin Pichard
+** Login   <pichar_v@epitech.eu>
 **
-** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 15:27:53 2017 Pierre-Emmanuel Jacquier
+** Started on  Wed Jan  4 09:07:13 2017 Valentin Pichard
+** Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
 */
 
-#ifndef MYIRC_H_
-# define MYIRC_H_
+#ifndef CLIENT_IRC_H__
+# define CLIENT_IRC_H__
 
-# define _GNU_SOURCE
+#include <unistd.h>
+#include <ncurses.h>
 
-# include <stdio.h>
-# include <netdb.h>
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <stdlib.h>
-# include <netinet/in.h>
-# include <unistd.h>
-# include <string.h>
-# include <errno.h>
-# include <signal.h>
-# include <poll.h>
-# include <ctype.h>
-
-/*
-** See feature_test_macros(7)
-*/
-# define _GNU_SOURCE
-
-# define MAX_QUEU 42
-# define NB_CMD 15
-# define BOOL t_bool
-
-/*
-** yan typedef socklen_t
-*/
-
-/*
-** yan typedef BOOL
-*/
-
-typedef enum s_bool
-{
-  FALSE,
-  TRUE
-}            t_bool;
-
-typedef struct          s_server_infos
-{
-  struct protoent       *pe;
-  int                   fd;
-  struct sockaddr_in    s_in;
-  int                   port;
-}                       t_server_infos;
-
-/*
-** server utiles
-*/
-BOOL     create_socket(t_server_infos *server_infos);
-BOOL     server_listen(t_server_infos *server_infos);
-
-#endif /* !MYIRC_H_ */
+#endif /* !CLIENT_IRC_H__ */
