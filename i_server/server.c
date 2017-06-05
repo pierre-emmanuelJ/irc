@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 17:47:56 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 21:35:31 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -29,6 +29,7 @@ BOOL     create_socket(t_server_infos *server_infos)
       return (FALSE);
     return (FALSE);
   }
+  g_serv_fd = server_infos->fd;
   return (TRUE);
 }
 
@@ -49,6 +50,8 @@ BOOL     server_accept(t_server_infos *server_infos)
   t_client_infos cli;
 
   poll_pos = 0;
+  memset(&cli.s_in_client, 0, sizeof(struct sockaddr_in));
+  cli.s_in_size = sizeof(cli.s_in_client);
   cli.client_fd = accept(server_infos->fd,
                          (struct sockaddr *)&cli.s_in_client,
                          &cli.s_in_size);
@@ -61,8 +64,14 @@ BOOL     server_accept(t_server_infos *server_infos)
   cli.client_ip = inet_ntoa(cli.s_in_client.sin_addr);
   cli.client_port = ntohs(cli.s_in_client.sin_port);
   printf("New connection from %s:%d\n", cli.client_ip, cli.client_port);
-  while (poll_pos < MAX_CLI && server_infos->clients[poll_pos++].fd > 0);
+  while (poll_pos < MAX_CLI
+    && (server_infos->clients[poll_pos].fd > 0
+    || server_infos->clients[poll_pos].fd == -1))
+    poll_pos++;
   if (poll_pos < MAX_CLI)
+  {
     server_infos->clients[poll_pos].fd = cli.client_fd;
+    server_infos->clients[poll_pos].events = POLLIN;
+  }
   return (TRUE);
 }

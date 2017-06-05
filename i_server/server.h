@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 17:55:08 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 21:20:57 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -52,6 +52,8 @@ typedef enum s_bool
   TRUE
 }            t_bool;
 
+extern int g_serv_fd;
+
 typedef struct          s_server_infos
 {
   struct protoent       *pe;
@@ -91,7 +93,7 @@ typedef struct          s_client_infos
 BOOL     create_socket(t_server_infos *server_infos);
 BOOL     server_listen(t_server_infos *server_infos);
 BOOL     server_accept(t_server_infos *server_infos);
-BOOL     data_client_receive(t_server_infos *server_infos);
+BOOL     data_client_receive(t_server_infos *server_infos, t_circular_buf *cbuf);
 
 /*
 ** init circular buffer

@@ -5,10 +5,12 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 18:03:33 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 21:31:47 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
+
+int g_serv_fd;
 
 void             *vmalloc(size_t size)
 {
@@ -34,11 +36,49 @@ static BOOL      is_number(char *number)
   return (TRUE);
 }
 
-BOOL data_client_receive(t_server_infos *serv)
+void    remove_client(struct pollfd *fds, int index)
 {
-  (void)serv;
-  printf("%s\n", "incoming data from client");
+  fds[index].fd = -1;
+}
+
+BOOL data_client_receive(t_server_infos *serv, t_circular_buf *cbuf)
+{
+  int i;
+  int  len;
+  char buf[4096];
+
+  i = 1;
+  while (i < MAX_CLI && serv->clients[i].fd != 0)
+  {
+    if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
+      {
+        bzero(buf, 4096);
+        printf("i will read\n");
+        len = read(serv->clients[i].fd, buf, 4096);
+        printf("i have read\n");
+
+          if (len == 0)
+            remove_client(serv->clients, i);
+          if (len > 0)
+            printf("%s\n", buf);
+      }
+    i++;
+  }
   return (TRUE);
+}
+
+size_t    count_pollfds(struct pollfd *fds)
+{
+  size_t i;
+
+  i = 0;
+  while (i < (size_t)MAX_CLI)
+  {
+    if (fds[i].fd == 0)
+      break ;
+    i++;
+  }
+  return (i);
 }
 
 static BOOL      server_main_loop(t_server_infos *server_infos)
@@ -50,19 +90,17 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
   server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
-  bzero(clients, sizeof(clients));
-  bzero(server_infos->clients, sizeof(struct pollfd) * MAX_CLI);
+  memset(clients, 0, sizeof(t_client_infos) * MAX_CLI);
+  memset(server_infos->clients, 0, sizeof(struct pollfd) * MAX_CLI);
   server_infos->clients[0].fd = server_infos->fd;
   server_infos->clients[0].events = POLLIN;
   while (1)
   {
-    printf("%s\n", "test1");
-    if ((event = poll(server_infos->clients, MAX_CLI, TIMEOUT)) < 0)
+    if ((event = poll(server_infos->clients, count_pollfds(server_infos->clients), TIMEOUT)) < 0)
     {
       perror("poll() failed");
       break ;
     }
-    printf("%s\n", "test2");
     if (!event)
     {
       fprintf(stderr, "poll() timed out. End program.\n");
@@ -71,7 +109,8 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
     if (server_infos->clients[0].revents == POLLIN)
       server_accept(server_infos);
     else
-      data_client_receive(server_infos);
+      data_client_receive(server_infos, cbuf);
+    printf("loop\n");
   }
   free(cbuf);
   free(server_infos->clients);
@@ -89,6 +128,13 @@ static BOOL      commons(t_server_infos *server_infos)
   return (TRUE);
 }
 
+static void    ctrl_c()
+{
+  close(g_serv_fd);
+  exit(EXIT_SUCCESS);
+}
+
+
 int                     main(int argc, char **argv)
 {
   t_server_infos        server_infos;
@@ -98,6 +144,7 @@ int                     main(int argc, char **argv)
     printf("USAGE: ./server port\n");
     return (FAILURE);
   }
+  signal(SIGINT, ctrl_c);
   server_infos.port = atoi(argv[1]);
   if (!commons(&server_infos))
   {
