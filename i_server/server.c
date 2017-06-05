@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 18:21:02 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 17:47:56 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -43,17 +43,26 @@ BOOL     server_listen(t_server_infos *server_infos)
   return (TRUE);
 }
 
-BOOL     server_accept(t_client_infos *client_infos,
-                       t_server_infos *server_infos)
+BOOL     server_accept(t_server_infos *server_infos)
 {
-  client_infos->client_fd = accept(server_infos->fd,
-                            (struct sockaddr *)&client_infos->s_in_client,
-                            &client_infos->s_in_size);
-  if (client_infos->client_fd == -1)
+  int    poll_pos;
+  t_client_infos cli;
+
+  poll_pos = 0;
+  cli.client_fd = accept(server_infos->fd,
+                         (struct sockaddr *)&cli.s_in_client,
+                         &cli.s_in_size);
+  if (cli.client_fd == -1)
   {
     if (close(server_infos->fd) == -1)
       return (FALSE);
     return (FALSE);
   }
+  cli.client_ip = inet_ntoa(cli.s_in_client.sin_addr);
+  cli.client_port = ntohs(cli.s_in_client.sin_port);
+  printf("New connection from %s:%d\n", cli.client_ip, cli.client_port);
+  while (poll_pos < MAX_CLI && server_infos->clients[poll_pos++].fd > 0);
+  if (poll_pos < MAX_CLI)
+    server_infos->clients[poll_pos].fd = cli.client_fd;
   return (TRUE);
 }

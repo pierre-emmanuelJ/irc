@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  2 14:42:21 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 18:03:33 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -34,26 +34,47 @@ static BOOL      is_number(char *number)
   return (TRUE);
 }
 
+BOOL data_client_receive(t_server_infos *serv)
+{
+  (void)serv;
+  printf("%s\n", "incoming data from client");
+  return (TRUE);
+}
+
 static BOOL      server_main_loop(t_server_infos *server_infos)
 {
   t_client_infos clients[MAX_CLI];
-  struct pollfd  fds[MAX_CLI];
   t_circular_buf *cbuf;
-  int            i;
+  int            event;
 
-  i = 0;
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
-  (void)fds;
-  (void)clients;
-  (void)server_infos;
+  server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
+  bzero(clients, sizeof(clients));
+  bzero(server_infos->clients, sizeof(struct pollfd) * MAX_CLI);
+  server_infos->clients[0].fd = server_infos->fd;
+  server_infos->clients[0].events = POLLIN;
   while (1)
   {
-    server_accept(&clients[i], server_infos);
-    printf("test new client %d\n", i);
-    i++;
+    printf("%s\n", "test1");
+    if ((event = poll(server_infos->clients, MAX_CLI, TIMEOUT)) < 0)
+    {
+      perror("poll() failed");
+      break ;
+    }
+    printf("%s\n", "test2");
+    if (!event)
+    {
+      fprintf(stderr, "poll() timed out. End program.\n");
+      break ;
+    }
+    if (server_infos->clients[0].revents == POLLIN)
+      server_accept(server_infos);
+    else
+      data_client_receive(server_infos);
   }
   free(cbuf);
+  free(server_infos->clients);
   return (TRUE);
 }
 

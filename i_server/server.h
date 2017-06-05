@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  2 14:36:31 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 17:55:08 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -19,6 +19,7 @@
 # include <sys/socket.h>
 # include <stdlib.h>
 # include <netinet/in.h>
+# include <arpa/inet.h>
 # include <unistd.h>
 # include <string.h>
 # include <errno.h>
@@ -31,10 +32,11 @@
 */
 # define _GNU_SOURCE
 
-# define FAILURE 84
-# define MAX_CLI 1024
-# define NB_CMD 15
+# define FAILURE (84)
+# define MAX_FD (sysconf(_SC_OPEN_MAX))
+# define MAX_CLI (MAX_FD)
 # define BOOL t_bool
+# define TIMEOUT (3 * 60 * 1000)
 
 /*
 ** yan typedef socklen_t
@@ -56,6 +58,7 @@ typedef struct          s_server_infos
   int                   fd;
   struct sockaddr_in    s_in;
   int                   port;
+  struct pollfd         *clients;
 }                       t_server_infos;
 
 typedef struct          s_circular_buf
@@ -79,7 +82,7 @@ typedef struct          s_client_infos
   char                  *client_ip;
   int                   client_port;
   t_chanel              *chanel;
-  struct pollfd         *fds;
+  struct pollfd         *pollfd;
 }                       t_client_infos;
 
 /*
@@ -87,8 +90,8 @@ typedef struct          s_client_infos
 */
 BOOL     create_socket(t_server_infos *server_infos);
 BOOL     server_listen(t_server_infos *server_infos);
-BOOL     server_accept(t_client_infos *client_infos,
-                       t_server_infos *server_infos);
+BOOL     server_accept(t_server_infos *server_infos);
+BOOL     data_client_receive(t_server_infos *server_infos);
 
 /*
 ** init circular buffer
