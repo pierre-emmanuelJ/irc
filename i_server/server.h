@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 21:20:57 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 22:13:32 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -105,5 +105,7 @@ void           init_circular_buf(t_circular_buf *cbuf);
 ** malloc memory verification
 */
 void           *vmalloc(size_t size);
+
+void            remove_crlf(char *str);
 
 #endif /* !MYIRC_H_ */

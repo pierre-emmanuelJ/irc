@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 21:31:47 2017 Pierre-Emmanuel Jacquier
+** Last update Mon Jun  5 22:15:54 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -46,21 +46,28 @@ BOOL data_client_receive(t_server_infos *serv, t_circular_buf *cbuf)
   int i;
   int  len;
   char buf[4096];
+  FILE *fp;
+  size_t readed;
+  char *input;
 
   i = 1;
+  readed = 0;
+  input = NULL;
   while (i < MAX_CLI && serv->clients[i].fd != 0)
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
         bzero(buf, 4096);
-        printf("i will read\n");
-        len = read(serv->clients[i].fd, buf, 4096);
-        printf("i have read\n");
-
-          if (len == 0)
-            remove_client(serv->clients, i);
-          if (len > 0)
-            printf("%s\n", buf);
+        fp = fdopen(serv->clients[i].fd, "r");
+        if ((len = getline(&input, &readed, fp)) <= 0)
+        {
+          remove_client(serv->clients, i++);
+          continue ;
+        }
+        remove_crlf(input);
+        printf("%s\n", input);
+        fflush(stdout);
+        free(input);
       }
     i++;
   }

@@ -5,7 +5,7 @@
 ## Login   <jacqui_p@epitech.eu>
 ##
 ## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Mon Jun  5 18:42:12 2017 Pierre-Emmanuel Jacquier
+## Last update Mon Jun  5 22:13:06 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
@@ -18,7 +18,8 @@ CFLAGS	= -Wall -Wextra -g
 
 SRC	= main.c \
       server.c \
-      circular_buf.c
+      circular_buf.c \
+      command_parsing.c
 
 OBJS = $(SRC:.c=.o)
 
