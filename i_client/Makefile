@@ -14,7 +14,7 @@ RM = rm -rf
 
 TARGET = client
 
-CFLAGS	= -Wall -Wextra -Werror -g -lncurses
+CFLAGS	= -Wall -Wextra -g
 
 SRC	= main.c
 
@@ -23,7 +23,7 @@ OBJS = $(SRC:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET) -lncurses
 	mv $(TARGET) ../$(TARGET)
 
 clean:
