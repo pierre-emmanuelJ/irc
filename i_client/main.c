@@ -1,6 +1,13 @@
-#include <unistd.h>
+#include "client.h"
 
 int main(void)
 {
-    return write(1, "Hello world!\n", 13);
+	initscr();			/* Start curses mode 		  */
+    start_color();
+	printw("Hello World !!!");	/* Print Hello World		  */
+	refresh();			/* Print it on to the real screen */
+	getch();			/* Wait for user input */
+	endwin();			/* End curses mode		  */
+
+	return 0;
 }
