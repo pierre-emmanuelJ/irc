@@ -13,5 +13,13 @@
 
 #include <unistd.h>
 #include <ncurses.h>
+#include <stdlib.h>
+
+typedef struct s_windows {
+  WINDOW *header;
+  WINDOW *body;
+  WINDOW *footer;
+  WINDOW *textbox;
+} t_windows;
 
 #endif /* !CLIENT_IRC_H__ */
