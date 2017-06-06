@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 01:04:08 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 01:09:37 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -167,7 +167,7 @@ BOOL     send_str_to_client(int client_fd, const char *msg)
   return (TRUE);
 }
 
-BOOL             empty_cbuf(t_circular_buf **cbuf)
+BOOL             use_cbuf(t_circular_buf **cbuf)
 {
   while (!(*cbuf)->is_empty && (*cbuf)->pollfd->revents == POLLOUT)
   {
@@ -217,10 +217,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
       server_accept(server_infos, clients);
       continue ;
     }
-    empty_cbuf(&cbuf);
+    use_cbuf(&cbuf);
     data_client_receive(server_infos, clients, cbuf);
     request_to_write(server_infos);
-    //printf("loop\n");
   }
   return (TRUE);
 }
