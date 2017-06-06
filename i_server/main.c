@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Tue Jun  6 20:42:50 2017 Pierre-Emmanuel Jacquier
+** Last update Tue Jun  6 21:44:23 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -115,9 +115,9 @@ BOOL        data_client_receive(t_server_infos *serv,
           continue ;
         }
         remove_crlf(input);
+        printf("%s\n", input);
         epure_str(input, strlen(input));
         command = split_str(input, ' ');
-        printf("%s\n", input);
         fflush(stdout);
         exec_command(command, &cli[i], &result);
         add_in_cbuf(&cbuf, &serv->clients[i], &cli[i], result);
@@ -213,7 +213,6 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
       server_accept(server_infos, clients);
       continue ;
     }
-    //print_buf();
     empty_cbuf(&cbuf);
     data_client_receive(server_infos, clients, cbuf);
     request_to_write(server_infos);
