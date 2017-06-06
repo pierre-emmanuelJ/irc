@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Tue Jun  6 19:55:07 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 01:03:55 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -52,17 +52,6 @@ typedef enum s_bool
   TRUE
 }            t_bool;
 
-extern int g_serv_fd;
-
-typedef struct          s_server_infos
-{
-  struct protoent       *pe;
-  int                   fd;
-  struct sockaddr_in    s_in;
-  int                   port;
-  struct pollfd         *clients;
-}                       t_server_infos;
-
 typedef struct          s_circular_buf
 {
   char                  *rfc_msg;
@@ -74,6 +63,15 @@ typedef struct          s_circular_buf
   struct s_circular_buf *end;
 
 }                       t_circular_buf;
+
+typedef struct          s_server_infos
+{
+  struct protoent       *pe;
+  int                   fd;
+  struct sockaddr_in    s_in;
+  int                   port;
+  struct pollfd         *clients;
+}                       t_server_infos;
 
 typedef struct          s_chanel
 {
@@ -88,8 +86,17 @@ typedef struct          s_client_infos
   char                  *client_ip;
   int                   client_port;
   t_chanel              *chanel;
+  FILE                  *fp;
   struct pollfd         *pollfd;
 }                       t_client_infos;
+
+typedef struct          end_prg
+{
+  struct pollfd         *pollfds;
+  t_circular_buf        *cbuf;
+}                       t_end_prg;
+
+extern t_end_prg g_end_prg;
 
 /*
 ** server utiles

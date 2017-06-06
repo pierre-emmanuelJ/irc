@@ -5,12 +5,12 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Tue Jun  6 21:44:23 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 01:04:08 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 
-int g_serv_fd;
+t_end_prg g_end_prg;
 
 void             *vmalloc(size_t size)
 {
@@ -38,6 +38,8 @@ static BOOL      is_number(char *number)
 
 void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
+  fclose(cli[index].fp);
+  close(fds[index].fd);
   fds[index].fd = -1;
   memset(&cli[index], 0, sizeof(t_client_infos));
   cli[index].client_fd = -1;
@@ -95,7 +97,6 @@ BOOL        data_client_receive(t_server_infos *serv,
 {
   int       i;
   int       len;
-  FILE      *fp;
   size_t    readed;
   char      *input;
   char      **command;
@@ -108,8 +109,9 @@ BOOL        data_client_receive(t_server_infos *serv,
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
-        fp = fdopen(serv->clients[i].fd, "r");
-        if ((len = getline(&input, &readed, fp)) <= 0)
+        if (cli[i].fp == NULL)
+          cli[i].fp = fdopen(serv->clients[i].fd, "r");
+        if ((len = getline(&input, &readed, cli[i].fp)) <= 0)
         {
           remove_client(serv->clients, cli, i++);
           continue ;
@@ -191,7 +193,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
 
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
+  g_end_prg.cbuf = cbuf;
   server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
+  g_end_prg.pollfds = server_infos->clients;
   memset(clients, 0, sizeof(t_client_infos) * MAX_CLI);
   memset(server_infos->clients, 0, sizeof(struct pollfd) * MAX_CLI);
   server_infos->clients[0].fd = server_infos->fd;
@@ -218,8 +222,6 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
     request_to_write(server_infos);
     //printf("loop\n");
   }
-  free(cbuf);
-  free(server_infos->clients);
   return (TRUE);
 }
 
@@ -236,7 +238,17 @@ static BOOL      commons(t_server_infos *server_infos)
 
 static void    ctrl_c()
 {
-  close(g_serv_fd);
+  int i;
+
+  i = 0;
+  while (g_end_prg.pollfds[i].fd != 0)
+  {
+    if (g_end_prg.pollfds[i].fd > 0)
+      close(g_end_prg.pollfds[i].fd);
+    i++;
+  }
+  free(g_end_prg.pollfds);
+  free(g_end_prg.cbuf);
   exit(EXIT_SUCCESS);
 }
 
