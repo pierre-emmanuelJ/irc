@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Wed May 31 19:14:45 2017 Pierre-Emmanuel Jacquier
+** Last update Tue Jun  6 19:56:08 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -19,6 +19,9 @@ t_circular_buf *create_circular_buf(void)
   new_buf->rfc_msg = NULL;
   new_buf->client_fd = -1;
   new_buf->next = NULL;
+  new_buf->pollfd = NULL;
+  new_buf->start = new_buf;
+  new_buf->end = NULL;
   return (new_buf);
 }
 
@@ -37,6 +40,9 @@ void           init_circular_buf(t_circular_buf *cbuf)
       break ;
     }
     tmp->next = tmp + 1;
+    tmp->next->start = cbuf;
+    tmp->next->end = NULL;
+    tmp->next->pollfd = NULL;
     tmp->next->is_empty = TRUE;
     tmp->next->rfc_msg = NULL;
     tmp->next->client_fd = -1;

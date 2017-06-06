@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 22:13:32 2017 Pierre-Emmanuel Jacquier
+** Last update Tue Jun  6 19:55:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -68,7 +68,11 @@ typedef struct          s_circular_buf
   char                  *rfc_msg;
   int                   client_fd;
   BOOL                  is_empty;
+  struct pollfd         *pollfd;
   struct s_circular_buf *next;
+  struct s_circular_buf *start;
+  struct s_circular_buf *end;
+
 }                       t_circular_buf;
 
 typedef struct          s_chanel
@@ -90,22 +94,23 @@ typedef struct          s_client_infos
 /*
 ** server utiles
 */
-BOOL     create_socket(t_server_infos *server_infos);
-BOOL     server_listen(t_server_infos *server_infos);
-BOOL     server_accept(t_server_infos *server_infos);
-BOOL     data_client_receive(t_server_infos *server_infos, t_circular_buf *cbuf);
+BOOL     create_socket(t_server_infos *);
+BOOL     server_listen(t_server_infos *);
+BOOL     server_accept(t_server_infos *, t_client_infos *);
+BOOL     data_client_receive(t_server_infos *, t_client_infos *, t_circular_buf *);
 
 /*
 ** init circular buffer
 */
 t_circular_buf *create_circular_buf(void);
-void           init_circular_buf(t_circular_buf *cbuf);
+void           init_circular_buf(t_circular_buf *);
 
 /*
 ** malloc memory verification
 */
 void           *vmalloc(size_t size);
-
-void            remove_crlf(char *str);
+void           epure_str(char *str, int str_len);
+char           **split_str(char *str, int delim);
+void           remove_crlf(char *str);
 
 #endif /* !MYIRC_H_ */

@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 22:15:54 2017 Pierre-Emmanuel Jacquier
+** Last update Tue Jun  6 20:42:50 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -36,19 +36,70 @@ static BOOL      is_number(char *number)
   return (TRUE);
 }
 
-void    remove_client(struct pollfd *fds, int index)
+void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
   fds[index].fd = -1;
+  memset(&cli[index], 0, sizeof(t_client_infos));
+  cli[index].client_fd = -1;
 }
 
-BOOL data_client_receive(t_server_infos *serv, t_circular_buf *cbuf)
+BOOL        exec_command(char **command, t_client_infos *cli, char **result)
 {
-  int i;
-  int  len;
-  char buf[4096];
-  FILE *fp;
-  size_t readed;
-  char *input;
+  asprintf(result, "command = %s fd = %d", command[0], cli->client_fd);
+  return (TRUE);
+}
+
+BOOL                add_in_cbuf(t_circular_buf **cbuf,
+                                struct pollfd *pollfd,
+                                t_client_infos *cli,
+                                char *result)
+{
+  t_circular_buf    *tmp;
+
+  tmp = *cbuf;
+  if (!tmp->end)
+  {
+    tmp->rfc_msg = result;
+    tmp->client_fd = cli->client_fd;
+    tmp->is_empty = FALSE;
+    tmp->pollfd = pollfd;
+    tmp->end = tmp + 1;
+    tmp->end->start = tmp;
+    return (TRUE);
+  }
+  if (tmp->end == tmp->start)
+  {
+    *cbuf = (*cbuf)->next;
+    (*cbuf)->end = tmp->end;
+    tmp = tmp->end;
+    tmp->start = *cbuf;
+    tmp->rfc_msg = result;
+    tmp->pollfd = pollfd;
+    tmp->client_fd = cli->client_fd;
+    tmp->is_empty = FALSE;
+    return (TRUE);
+  }
+  tmp = tmp->end;
+  tmp->rfc_msg = result;
+  tmp->client_fd = cli->client_fd;
+  tmp->is_empty = FALSE;
+  tmp->pollfd = pollfd;
+  tmp->start = *cbuf;
+  (*cbuf)->end = tmp;
+  return (TRUE);
+}
+
+BOOL        data_client_receive(t_server_infos *serv,
+                                t_client_infos *cli,
+                                t_circular_buf *cbuf)
+{
+  int       i;
+  int       len;
+  FILE      *fp;
+  size_t    readed;
+  char      *input;
+  char      **command;
+  char      *result;
 
   i = 1;
   readed = 0;
@@ -57,16 +108,20 @@ BOOL data_client_receive(t_server_infos *serv, t_circular_buf *cbuf)
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
-        bzero(buf, 4096);
         fp = fdopen(serv->clients[i].fd, "r");
         if ((len = getline(&input, &readed, fp)) <= 0)
         {
-          remove_client(serv->clients, i++);
+          remove_client(serv->clients, cli, i++);
           continue ;
         }
         remove_crlf(input);
+        epure_str(input, strlen(input));
+        command = split_str(input, ' ');
         printf("%s\n", input);
         fflush(stdout);
+        exec_command(command, &cli[i], &result);
+        add_in_cbuf(&cbuf, &serv->clients[i], &cli[i], result);
+        free(command);
         free(input);
       }
     i++;
@@ -86,6 +141,46 @@ size_t    count_pollfds(struct pollfd *fds)
     i++;
   }
   return (i);
+}
+
+BOOL             request_to_write(t_server_infos *serv)
+{
+  int       i;
+
+  i = 1;
+  while (i < MAX_CLI && serv->clients[i].fd != 0)
+  {
+    if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
+        serv->clients[i].events = POLLOUT;
+    i++;
+  }
+  return (TRUE);
+}
+
+BOOL     send_str_to_client(int client_fd, const char *msg)
+{
+  if (write(client_fd, msg, strlen(msg)) == -1
+      || write(client_fd, "\r\n", 2) == -1)
+    return (FALSE);
+  return (TRUE);
+}
+
+BOOL             empty_cbuf(t_circular_buf **cbuf)
+{
+  while (!(*cbuf)->is_empty && (*cbuf)->pollfd->revents == POLLOUT)
+  {
+    if (!send_str_to_client((*cbuf)->client_fd, (*cbuf)->rfc_msg))
+      perror("send_str_to_client()");
+    (*cbuf)->is_empty = TRUE;
+    free((*cbuf)->rfc_msg);
+    if ((*cbuf)->end == (*cbuf)->next)
+      (*cbuf)->next->end = NULL;
+    else
+      (*cbuf)->next->end = (*cbuf)->end;
+    (*cbuf)->pollfd->events = POLLIN;
+    (*cbuf)++;
+  }
+  return (TRUE);
 }
 
 static BOOL      server_main_loop(t_server_infos *server_infos)
@@ -114,10 +209,15 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
       break ;
     }
     if (server_infos->clients[0].revents == POLLIN)
-      server_accept(server_infos);
-    else
-      data_client_receive(server_infos, cbuf);
-    printf("loop\n");
+    {
+      server_accept(server_infos, clients);
+      continue ;
+    }
+    //print_buf();
+    empty_cbuf(&cbuf);
+    data_client_receive(server_infos, clients, cbuf);
+    request_to_write(server_infos);
+    //printf("loop\n");
   }
   free(cbuf);
   free(server_infos->clients);

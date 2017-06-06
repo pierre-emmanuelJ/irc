@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 21:35:31 2017 Pierre-Emmanuel Jacquier
+** Last update Tue Jun  6 14:01:50 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -44,7 +44,7 @@ BOOL     server_listen(t_server_infos *server_infos)
   return (TRUE);
 }
 
-BOOL     server_accept(t_server_infos *server_infos)
+BOOL     server_accept(t_server_infos *server_infos, t_client_infos *clients)
 {
   int    poll_pos;
   t_client_infos cli;
@@ -72,6 +72,9 @@ BOOL     server_accept(t_server_infos *server_infos)
   {
     server_infos->clients[poll_pos].fd = cli.client_fd;
     server_infos->clients[poll_pos].events = POLLIN;
+    memcpy(&clients[poll_pos], &cli, sizeof(cli));
+    clients[poll_pos].pollfd = &server_infos->clients[poll_pos];
+    clients[poll_pos].chanel = NULL;
   }
   return (TRUE);
 }
