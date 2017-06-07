@@ -5,10 +5,11 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 15:53:59 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 19:09:39 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
+#include "pfunctions_commands.h"
 
 t_end_prg g_end_prg;
 
@@ -21,8 +22,9 @@ void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
   cli[index].client_fd = -1;
 }
 
-BOOL        exec_command(char **command, t_client_infos *cli, char **result)
+BOOL        exec_command(char **command, t_server_infos *serv, t_client_infos *cli, char **result)
 {
+  call_function((t_pf *)serv->pfuncs, command, serv, cli);
   asprintf(result, "command = %s fd = %d", command[0], cli->client_fd);
   return (TRUE);
 }
@@ -57,7 +59,7 @@ BOOL        data_client_receive(t_server_infos *serv,
         epure_str(input, strlen(input));
         command = split_str(input, ' ');
         fflush(stdout);
-        exec_command(command, &cli[i], &result);
+        exec_command(command, serv, &cli[i], &result);
         add_in_cbuf(&cbuf, &serv->clients[i], &cli[i], result);
         free(command);
         free(input);
@@ -182,6 +184,7 @@ static void    ctrl_c()
 int                     main(int argc, char **argv)
 {
   t_server_infos        server_infos;
+  t_pf                  pf;
 
   if (argc != 2 || !is_number(argv[1]))
   {
@@ -189,6 +192,8 @@ int                     main(int argc, char **argv)
     return (FAILURE);
   }
   signal(SIGINT, ctrl_c);
+  init_tpsf_tab(&pf);
+  server_infos.pfuncs = (void *)&pf;
   server_infos.port = atoi(argv[1]);
   if (!commons(&server_infos))
   {
