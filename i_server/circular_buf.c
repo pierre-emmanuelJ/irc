@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 15:52:35 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 16:42:39 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -24,6 +24,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     tmp->client_fd = cli->client_fd;
     tmp->is_empty = FALSE;
     tmp->pollfd = pollfd;
+    tmp->client = cli;
     tmp->end = tmp + 1;
     tmp->end->start = tmp;
     return (TRUE);
@@ -36,6 +37,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     tmp->start = *cbuf;
     tmp->rfc_msg = result;
     tmp->pollfd = pollfd;
+    tmp->client = cli;
     tmp->client_fd = cli->client_fd;
     tmp->is_empty = FALSE;
     return (TRUE);
@@ -45,6 +47,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   tmp->client_fd = cli->client_fd;
   tmp->is_empty = FALSE;
   tmp->pollfd = pollfd;
+  tmp->client = cli;
   tmp->start = *cbuf;
   (*cbuf)->end = tmp;
   return (TRUE);

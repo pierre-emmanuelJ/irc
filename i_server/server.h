@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 16:39:25 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 16:44:31 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -112,6 +112,7 @@ BOOL     create_socket(t_server_infos *);
 BOOL     server_listen(t_server_infos *);
 BOOL     server_accept(t_server_infos *, t_client_infos *);
 BOOL     data_client_receive(t_server_infos *, t_client_infos *, t_circular_buf *);
+BOOL     send_str_to_client(int client_fd, const char *msg);
 
 /*
 ** circular buffer
