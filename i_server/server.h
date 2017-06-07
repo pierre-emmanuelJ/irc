@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 01:03:55 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 16:39:25 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -52,18 +52,6 @@ typedef enum s_bool
   TRUE
 }            t_bool;
 
-typedef struct          s_circular_buf
-{
-  char                  *rfc_msg;
-  int                   client_fd;
-  BOOL                  is_empty;
-  struct pollfd         *pollfd;
-  struct s_circular_buf *next;
-  struct s_circular_buf *start;
-  struct s_circular_buf *end;
-
-}                       t_circular_buf;
-
 typedef struct          s_server_infos
 {
   struct protoent       *pe;
@@ -90,6 +78,19 @@ typedef struct          s_client_infos
   struct pollfd         *pollfd;
 }                       t_client_infos;
 
+typedef struct          s_circular_buf
+{
+  char                  *rfc_msg;
+  int                   client_fd;
+  BOOL                  is_empty;
+  struct pollfd         *pollfd;
+  t_client_infos        *client;
+  struct s_circular_buf *next;
+  struct s_circular_buf *start;
+  struct s_circular_buf *end;
+
+}                       t_circular_buf;
+
 typedef struct          end_prg
 {
   struct pollfd         *pollfds;
@@ -97,6 +98,12 @@ typedef struct          end_prg
 }                       t_end_prg;
 
 extern t_end_prg g_end_prg;
+
+/*
+** utils functions
+*/
+void     *vmalloc(size_t size);
+BOOL     is_number(char *number);
 
 /*
 ** server utiles
@@ -107,10 +114,15 @@ BOOL     server_accept(t_server_infos *, t_client_infos *);
 BOOL     data_client_receive(t_server_infos *, t_client_infos *, t_circular_buf *);
 
 /*
-** init circular buffer
+** circular buffer
 */
 t_circular_buf *create_circular_buf(void);
 void           init_circular_buf(t_circular_buf *);
+BOOL           add_in_cbuf(t_circular_buf **cbuf,
+                           struct pollfd *pollfd,
+                           t_client_infos *cli,
+                           char *result);
+BOOL             use_cbuf(t_circular_buf **cbuf);
 
 /*
 ** malloc memory verification

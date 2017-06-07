@@ -5,36 +5,12 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 01:09:37 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 15:53:59 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 
 t_end_prg g_end_prg;
-
-void             *vmalloc(size_t size)
-{
-  void           *mem;
-
-  mem = malloc(size);
-  if (!mem)
-  {
-    perror("malloc failed");
-    exit (FAILURE);
-  }
-  return (mem);
-}
-
-static BOOL      is_number(char *number)
-{
-  while (*number)
-  {
-    if (!isdigit(*number))
-      return (FALSE);
-    number++;
-  }
-  return (TRUE);
-}
 
 void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
@@ -48,46 +24,6 @@ void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 BOOL        exec_command(char **command, t_client_infos *cli, char **result)
 {
   asprintf(result, "command = %s fd = %d", command[0], cli->client_fd);
-  return (TRUE);
-}
-
-BOOL                add_in_cbuf(t_circular_buf **cbuf,
-                                struct pollfd *pollfd,
-                                t_client_infos *cli,
-                                char *result)
-{
-  t_circular_buf    *tmp;
-
-  tmp = *cbuf;
-  if (!tmp->end)
-  {
-    tmp->rfc_msg = result;
-    tmp->client_fd = cli->client_fd;
-    tmp->is_empty = FALSE;
-    tmp->pollfd = pollfd;
-    tmp->end = tmp + 1;
-    tmp->end->start = tmp;
-    return (TRUE);
-  }
-  if (tmp->end == tmp->start)
-  {
-    *cbuf = (*cbuf)->next;
-    (*cbuf)->end = tmp->end;
-    tmp = tmp->end;
-    tmp->start = *cbuf;
-    tmp->rfc_msg = result;
-    tmp->pollfd = pollfd;
-    tmp->client_fd = cli->client_fd;
-    tmp->is_empty = FALSE;
-    return (TRUE);
-  }
-  tmp = tmp->end;
-  tmp->rfc_msg = result;
-  tmp->client_fd = cli->client_fd;
-  tmp->is_empty = FALSE;
-  tmp->pollfd = pollfd;
-  tmp->start = *cbuf;
-  (*cbuf)->end = tmp;
   return (TRUE);
 }
 
@@ -167,39 +103,12 @@ BOOL     send_str_to_client(int client_fd, const char *msg)
   return (TRUE);
 }
 
-BOOL             use_cbuf(t_circular_buf **cbuf)
+static BOOL      server_main_loop(t_server_infos *server_infos,
+                                  t_client_infos *clients,
+                                  t_circular_buf *cbuf)
 {
-  while (!(*cbuf)->is_empty && (*cbuf)->pollfd->revents == POLLOUT)
-  {
-    if (!send_str_to_client((*cbuf)->client_fd, (*cbuf)->rfc_msg))
-      perror("send_str_to_client()");
-    (*cbuf)->is_empty = TRUE;
-    free((*cbuf)->rfc_msg);
-    if ((*cbuf)->end == (*cbuf)->next)
-      (*cbuf)->next->end = NULL;
-    else
-      (*cbuf)->next->end = (*cbuf)->end;
-    (*cbuf)->pollfd->events = POLLIN;
-    (*cbuf)++;
-  }
-  return (TRUE);
-}
-
-static BOOL      server_main_loop(t_server_infos *server_infos)
-{
-  t_client_infos clients[MAX_CLI];
-  t_circular_buf *cbuf;
   int            event;
 
-  cbuf = create_circular_buf();
-  init_circular_buf(cbuf);
-  g_end_prg.cbuf = cbuf;
-  server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
-  g_end_prg.pollfds = server_infos->clients;
-  memset(clients, 0, sizeof(t_client_infos) * MAX_CLI);
-  memset(server_infos->clients, 0, sizeof(struct pollfd) * MAX_CLI);
-  server_infos->clients[0].fd = server_infos->fd;
-  server_infos->clients[0].events = POLLIN;
   while (1)
   {
     if ((event = poll(server_infos->clients, count_pollfds(server_infos->clients), TIMEOUT)) < 0)
@@ -224,13 +133,32 @@ static BOOL      server_main_loop(t_server_infos *server_infos)
   return (TRUE);
 }
 
+static BOOL         init_data_server(t_server_infos *server_infos)
+{
+  t_circular_buf    *cbuf;
+  t_client_infos    clients[MAX_CLI];
+
+  cbuf = create_circular_buf();
+  init_circular_buf(cbuf);
+  g_end_prg.cbuf = cbuf;
+  server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
+  g_end_prg.pollfds = server_infos->clients;
+  memset(clients, 0, sizeof(t_client_infos) * MAX_CLI);
+  memset(server_infos->clients, 0, sizeof(struct pollfd) * MAX_CLI);
+  server_infos->clients[0].fd = server_infos->fd;
+  server_infos->clients[0].events = POLLIN;
+  if (!server_main_loop(server_infos, clients, cbuf))
+    return (FALSE);
+  return (TRUE);
+}
+
 static BOOL      commons(t_server_infos *server_infos)
 {
   if (!create_socket(server_infos))
     return (FALSE);
   if (!server_listen(server_infos))
     return (FALSE);
-  if (!server_main_loop(server_infos))
+  if (!init_data_server(server_infos))
     return (FALSE);
   return (TRUE);
 }
@@ -250,7 +178,6 @@ static void    ctrl_c()
   free(g_end_prg.cbuf);
   exit(EXIT_SUCCESS);
 }
-
 
 int                     main(int argc, char **argv)
 {
