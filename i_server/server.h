@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Tue Jun  6 19:55:07 2017 Pierre-Emmanuel Jacquier
+** Last update Thu Jun  8 14:05:55 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -37,6 +37,7 @@
 # define MAX_CLI (MAX_FD)
 # define BOOL t_bool
 # define TIMEOUT (3 * 60 * 1000)
+# define NB_COMMANDS (5)
 
 /*
 ** yan typedef socklen_t
@@ -52,7 +53,11 @@ typedef enum s_bool
   TRUE
 }            t_bool;
 
-extern int g_serv_fd;
+typedef struct          s_chanel
+{
+  char                  *chanel_name;
+  struct pollfd         *fds_in_chanel;
+}                       t_chanel;
 
 typedef struct          s_server_infos
 {
@@ -61,24 +66,8 @@ typedef struct          s_server_infos
   struct sockaddr_in    s_in;
   int                   port;
   struct pollfd         *clients;
+  void                  *pfuncs;
 }                       t_server_infos;
-
-typedef struct          s_circular_buf
-{
-  char                  *rfc_msg;
-  int                   client_fd;
-  BOOL                  is_empty;
-  struct pollfd         *pollfd;
-  struct s_circular_buf *next;
-  struct s_circular_buf *start;
-  struct s_circular_buf *end;
-
-}                       t_circular_buf;
-
-typedef struct          s_chanel
-{
-  char                  *chanel_name;
-}                       t_chanel;
 
 typedef struct          s_client_infos
 {
@@ -87,9 +76,39 @@ typedef struct          s_client_infos
   int                   client_fd;
   char                  *client_ip;
   int                   client_port;
-  t_chanel              *chanel;
+  char                  *nickname;
+  t_chanel              *chanels;
+  t_chanel              *cur_chanel;
+  FILE                  *fp;
   struct pollfd         *pollfd;
 }                       t_client_infos;
+
+typedef struct          s_circular_buf
+{
+  char                  *rfc_msg;
+  int                   client_fd;
+  BOOL                  is_empty;
+  struct pollfd         *pollfd;
+  t_client_infos        *client;
+  int                   *fds_to_write;
+  struct s_circular_buf *next;
+  struct s_circular_buf *start;
+  struct s_circular_buf *end;
+}                       t_circular_buf;
+
+typedef struct          end_prg
+{
+  struct pollfd         *pollfds;
+  t_circular_buf        *cbuf;
+}                       t_end_prg;
+
+extern t_end_prg g_end_prg;
+
+/*
+** utils functions
+*/
+void     *vmalloc(size_t size);
+BOOL     is_number(char *number);
 
 /*
 ** server utiles
@@ -98,12 +117,18 @@ BOOL     create_socket(t_server_infos *);
 BOOL     server_listen(t_server_infos *);
 BOOL     server_accept(t_server_infos *, t_client_infos *);
 BOOL     data_client_receive(t_server_infos *, t_client_infos *, t_circular_buf *);
+BOOL     send_str_to_client(int client_fd, const char *msg);
 
 /*
-** init circular buffer
+** circular buffer
 */
 t_circular_buf *create_circular_buf(void);
 void           init_circular_buf(t_circular_buf *);
+BOOL           add_in_cbuf(t_circular_buf **cbuf,
+                           struct pollfd *pollfd,
+                           t_client_infos *cli,
+                           char *result);
+BOOL             use_cbuf(t_circular_buf **cbuf);
 
 /*
 ** malloc memory verification

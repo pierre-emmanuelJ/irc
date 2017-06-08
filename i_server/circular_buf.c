@@ -5,10 +5,71 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Tue Jun  6 19:56:08 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 23:40:06 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
+
+BOOL                add_in_cbuf(t_circular_buf **cbuf,
+                                struct pollfd *pollfd,
+                                t_client_infos *cli,
+                                char *result)
+{
+  t_circular_buf    *tmp;
+
+  tmp = *cbuf;
+  if (!tmp->end)
+  {
+    tmp->rfc_msg = result;
+    tmp->client_fd = cli->client_fd;
+    tmp->is_empty = FALSE;
+    tmp->pollfd = pollfd;
+    tmp->client = cli;
+    tmp->end = tmp + 1;
+    tmp->end->start = tmp;
+    return (TRUE);
+  }
+  if (tmp->end == tmp->start)
+  {
+    *cbuf = (*cbuf)->next;
+    (*cbuf)->end = tmp->end;
+    tmp = tmp->end;
+    tmp->start = *cbuf;
+    tmp->rfc_msg = result;
+    tmp->pollfd = pollfd;
+    tmp->client = cli;
+    tmp->client_fd = cli->client_fd;
+    tmp->is_empty = FALSE;
+    return (TRUE);
+  }
+  tmp = tmp->end;
+  tmp->rfc_msg = result;
+  tmp->client_fd = cli->client_fd;
+  tmp->is_empty = FALSE;
+  tmp->pollfd = pollfd;
+  tmp->client = cli;
+  tmp->start = *cbuf;
+  (*cbuf)->end = tmp;
+  return (TRUE);
+}
+
+BOOL             use_cbuf(t_circular_buf **cbuf)
+{
+  while (!(*cbuf)->is_empty /*&& (*cbuf)->pollfd->revents == POLLOUT*/)
+  {
+    if (!send_str_to_client((*cbuf)->client_fd, (*cbuf)->rfc_msg))
+      perror("send_str_to_client()");
+    (*cbuf)->is_empty = TRUE;
+    free((*cbuf)->rfc_msg);
+    if ((*cbuf)->end == (*cbuf)->next)
+      (*cbuf)->next->end = NULL;
+    else
+      (*cbuf)->next->end = (*cbuf)->end;
+    (*cbuf)->pollfd->events = POLLIN;
+    (*cbuf)++;
+  }
+  return (TRUE);
+}
 
 t_circular_buf *create_circular_buf(void)
 {
@@ -25,7 +86,7 @@ t_circular_buf *create_circular_buf(void)
   return (new_buf);
 }
 
-void           init_circular_buf(t_circular_buf *cbuf)
+void             init_circular_buf(t_circular_buf *cbuf)
 {
   int            i;
   t_circular_buf *tmp;
