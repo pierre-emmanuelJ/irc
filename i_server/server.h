@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  8 14:05:55 2017 Pierre-Emmanuel Jacquier
+** Last update Thu Jun  8 18:05:16 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -56,7 +56,7 @@ typedef enum s_bool
 typedef struct          s_chanel
 {
   char                  *chanel_name;
-  struct pollfd         *fds_in_chanel;
+  struct pollfd         **fds_in_chanel;
 }                       t_chanel;
 
 typedef struct          s_server_infos
@@ -67,6 +67,7 @@ typedef struct          s_server_infos
   int                   port;
   struct pollfd         *clients;
   void                  *pfuncs;
+  t_chanel              *chanels;
 }                       t_server_infos;
 
 typedef struct          s_client_infos
@@ -77,7 +78,7 @@ typedef struct          s_client_infos
   char                  *client_ip;
   int                   client_port;
   char                  *nickname;
-  t_chanel              *chanels;
+  t_chanel              **chanels;
   t_chanel              *cur_chanel;
   FILE                  *fp;
   struct pollfd         *pollfd;

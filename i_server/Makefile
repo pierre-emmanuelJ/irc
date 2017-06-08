@@ -5,7 +5,7 @@
 ## Login   <jacqui_p@epitech.eu>
 ##
 ## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Wed Jun  7 19:11:39 2017 Pierre-Emmanuel Jacquier
+## Last update Thu Jun  8 17:58:04 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
@@ -14,7 +14,7 @@ RM = rm -rf
 
 TARGET = server
 
-CFLAGS	= -Wall -Wextra -g
+CFLAGS	= -W -Wall -Wextra -g
 
 SRC	= main.c \
       server.c \
@@ -22,7 +22,8 @@ SRC	= main.c \
       command_parsing.c \
       utils_funcs.c \
       call_pfunctions.c \
-      commands_functions.c
+      commands_functions.c \
+      chanel.c
 
 OBJS = $(SRC:.c=.o)
 
