@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 00:53:49 2017 Pierre-Emmanuel Jacquier
+** Last update Thu Jun  8 14:07:46 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -50,7 +50,6 @@ BOOL     server_accept(t_server_infos *server_infos, t_client_infos *clients)
 
   poll_pos = 0;
   memset(&cli, 0, sizeof(t_client_infos));
-  memset(&cli.s_in_client, 0, sizeof(struct sockaddr_in));
   cli.s_in_size = sizeof(cli.s_in_client);
   cli.client_fd = accept(server_infos->fd,
                          (struct sockaddr *)&cli.s_in_client,

@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 16:42:39 2017 Pierre-Emmanuel Jacquier
+** Last update Wed Jun  7 23:40:06 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -86,7 +86,7 @@ t_circular_buf *create_circular_buf(void)
   return (new_buf);
 }
 
-void           init_circular_buf(t_circular_buf *cbuf)
+void             init_circular_buf(t_circular_buf *cbuf)
 {
   int            i;
   t_circular_buf *tmp;
