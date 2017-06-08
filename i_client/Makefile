@@ -16,7 +16,10 @@ TARGET = client
 
 CFLAGS	= -Wall -Wextra -g
 
-SRC	= main.c
+SRC	= main.c \
+			utils.c \
+			init.c \
+			windows.c
 
 OBJS = $(SRC:.c=.o)
 
