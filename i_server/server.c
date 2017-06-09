@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  8 14:07:46 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 15:49:36 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -63,6 +63,7 @@ BOOL     server_accept(t_server_infos *server_infos, t_client_infos *clients)
   cli.client_ip = inet_ntoa(cli.s_in_client.sin_addr);
   cli.client_port = ntohs(cli.s_in_client.sin_port);
   printf("New connection from %s:%d\n", cli.client_ip, cli.client_port);
+  send_str_to_client(cli.client_fd, "001 :Welcome");
   while (poll_pos < MAX_CLI
          && !(server_infos->clients[poll_pos].fd == 0)
          && !(server_infos->clients[poll_pos].fd == -1))

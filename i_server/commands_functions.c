@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 19:48:13 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 17:18:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -16,7 +16,7 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  printf("%s\n", "pf function");
+
   return (TRUE);
 }
 
@@ -25,7 +25,7 @@ BOOL     user_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  printf("%s\n", "pf function");
+
   return (TRUE);
 }
 
@@ -34,7 +34,7 @@ BOOL     ping_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  printf("%s\n", "pf function");
+
   return (TRUE);
 }
 
@@ -43,7 +43,6 @@ BOOL     pong_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  printf("%s\n", "pf function");
   return (TRUE);
 }
 
@@ -52,6 +51,8 @@ BOOL     quit_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  printf("%s\n", "pf function");
+  // cli->client_fd = -1;
+  // cli->pollfd->fd = -1;
+  close(cli->client_fd);
   return (TRUE);
 }

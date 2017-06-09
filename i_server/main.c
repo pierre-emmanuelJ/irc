@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 15:38:58 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 18:18:02 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -22,20 +22,21 @@ void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
   cli[index].client_fd = -1;
 }
 
-BOOL        exec_command(char **command, t_server_infos *serv, t_client_infos *cli, char **result)
+BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result)
 {
-  call_function((t_pf *)serv->pfuncs, command, serv, cli);
-  asprintf(result, "command = %s fd = %d", command[0], cli->client_fd);
+  char     **argv;
+
+  argv = split_str(command, ' ');
+  call_function((t_pf *)serv->pfuncs, argv, serv, cli);
+  asprintf(result, "command = %s fd = %d", argv[0], cli->client_fd);
+  free(command);
   return (TRUE);
 }
 
 void        exec_lines(t_server_infos *serv,
                        struct pollfd  *pollfd,
-                       t_client_infos *cli,
-                       t_circular_buf *cbuf)
+                       t_client_infos *cli)
 {
-  char      **command;
-  char      *result;
   char      **lines;
   char       **tmp;
 
@@ -44,21 +45,17 @@ void        exec_lines(t_server_infos *serv,
   while (*lines)
   {
     remove_crlf(*lines);
-    printf("%s\n", *lines);
-    epure_str(*lines, strlen(*lines));
-    command = split_str(*lines, ' ');
+    printf("commande : %s\n", *lines);
     fflush(stdout);
-    exec_command(command, serv, cli, &result);
-    add_in_cbuf(&cbuf, pollfd, cli, result);
-    free(command);
+    epure_str(*lines, strlen(*lines));
+    add_in_cbuf(&serv->cbuf, pollfd, cli, *lines);
     lines++;
   }
   free(tmp);
 }
 
 BOOL        data_client_receive(t_server_infos *serv,
-                                t_client_infos *cli,
-                                t_circular_buf *cbuf)
+                                t_client_infos *cli)
 {
   int       i;
   char      input[1024];
@@ -69,17 +66,21 @@ BOOL        data_client_receive(t_server_infos *serv,
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
-        if ((len = read(serv->clients[i].fd, input, 1024)) <= 0)
+        if (!(len = read(serv->clients[i].fd, input, 1024)))
         {
           remove_client(serv->clients, cli, i++);
           continue ;
         }
         input[len] = 0;
+        remove_crlf(input);
+        if (!strcmp(input, ""))
+          continue;
         serv->input = input;
-        exec_lines(serv, &serv->clients[i], &cli[i], cbuf);
+        exec_lines(serv, &serv->clients[i], &cli[i]);
       }
     i++;
   }
+  printf("%s\n","out" );
   return (TRUE);
 }
 
@@ -120,8 +121,7 @@ BOOL     send_str_to_client(int client_fd, const char *msg)
 }
 
 static BOOL      server_main_loop(t_server_infos *server_infos,
-                                  t_client_infos *clients,
-                                  t_circular_buf *cbuf)
+                                  t_client_infos *clients)
 {
   int            event;
 
@@ -142,8 +142,8 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
       server_accept(server_infos, clients);
       continue ;
     }
-    data_client_receive(server_infos, clients, cbuf);
-    use_cbuf(&cbuf);
+    data_client_receive(server_infos, clients);
+    use_cbuf(&server_infos->cbuf, server_infos);
     //request_to_write(server_infos);
   }
   return (TRUE);
@@ -159,6 +159,7 @@ static BOOL         init_data_server(t_server_infos *server_infos)
   server_infos->chanels = chanels;
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
+  server_infos->cbuf = cbuf;
   g_end_prg.cbuf = cbuf;
   server_infos->clients = vmalloc(sizeof(struct pollfd) * MAX_CLI);
   g_end_prg.pollfds = server_infos->clients;
@@ -166,7 +167,7 @@ static BOOL         init_data_server(t_server_infos *server_infos)
   memset(server_infos->clients, 0, sizeof(struct pollfd) * MAX_CLI);
   server_infos->clients[0].fd = server_infos->fd;
   server_infos->clients[0].events = POLLIN;
-  if (!server_main_loop(server_infos, clients, cbuf))
+  if (!server_main_loop(server_infos, clients))
     return (FALSE);
   return (TRUE);
 }
@@ -208,7 +209,6 @@ int                     main(int argc, char **argv)
     fprintf(stderr, "USAGE: ./server port\n");
     return (FAILURE);
   }
-  printf("MAX cli = %d\n", MAX_CLI);
   signal(SIGINT, ctrl_c);
   init_tpsf_tab(&pf);
   server_infos.pfuncs = (void *)&pf;
