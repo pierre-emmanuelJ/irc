@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  8 15:05:22 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 15:38:58 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -15,7 +15,7 @@ t_end_prg g_end_prg;
 
 void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
-  fclose(cli[index].fp);
+  printf("client %s:%d leave\n", cli[index].client_ip, cli[index].client_port);
   close(fds[index].fd);
   fds[index].fd = -1;
   memset(&cli[index], 0, sizeof(t_client_infos));
@@ -29,40 +29,54 @@ BOOL        exec_command(char **command, t_server_infos *serv, t_client_infos *c
   return (TRUE);
 }
 
+void        exec_lines(t_server_infos *serv,
+                       struct pollfd  *pollfd,
+                       t_client_infos *cli,
+                       t_circular_buf *cbuf)
+{
+  char      **command;
+  char      *result;
+  char      **lines;
+  char       **tmp;
+
+  lines = split_str(serv->input, '\n');
+  tmp = lines;
+  while (*lines)
+  {
+    remove_crlf(*lines);
+    printf("%s\n", *lines);
+    epure_str(*lines, strlen(*lines));
+    command = split_str(*lines, ' ');
+    fflush(stdout);
+    exec_command(command, serv, cli, &result);
+    add_in_cbuf(&cbuf, pollfd, cli, result);
+    free(command);
+    lines++;
+  }
+  free(tmp);
+}
+
 BOOL        data_client_receive(t_server_infos *serv,
                                 t_client_infos *cli,
                                 t_circular_buf *cbuf)
 {
   int       i;
+  char      input[1024];
   int       len;
-  size_t    readed;
-  char      *input;
-  char      **command;
-  char      *result;
 
   i = 1;
-  readed = 0;
-  input = NULL;
   while (i < MAX_CLI && serv->clients[i].fd != 0)
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
-        if (cli[i].fp == NULL)
-          cli[i].fp = fdopen(serv->clients[i].fd, "r");
-        if ((len = getline(&input, &readed, cli[i].fp)) <= 0)
+        if ((len = read(serv->clients[i].fd, input, 1024)) <= 0)
         {
           remove_client(serv->clients, cli, i++);
           continue ;
         }
-        remove_crlf(input);
-        printf("%s\n", input);
-        epure_str(input, strlen(input));
-        command = split_str(input, ' ');
-        fflush(stdout);
-        exec_command(command, serv, &cli[i], &result);
-        add_in_cbuf(&cbuf, &serv->clients[i], &cli[i], result);
-        free(command);
-        free(input);
+        input[len] = 0;
+        serv->input = input;
+        exec_lines(serv, &serv->clients[i], &cli[i], cbuf);
       }
     i++;
   }
@@ -128,9 +142,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
       server_accept(server_infos, clients);
       continue ;
     }
-    use_cbuf(&cbuf);
     data_client_receive(server_infos, clients, cbuf);
-    request_to_write(server_infos);
+    use_cbuf(&cbuf);
+    //request_to_write(server_infos);
   }
   return (TRUE);
 }
@@ -191,9 +205,10 @@ int                     main(int argc, char **argv)
 
   if (argc != 2 || !is_number(argv[1]))
   {
-    printf("USAGE: ./server port\n");
+    fprintf(stderr, "USAGE: ./server port\n");
     return (FAILURE);
   }
+  printf("MAX cli = %d\n", MAX_CLI);
   signal(SIGINT, ctrl_c);
   init_tpsf_tab(&pf);
   server_infos.pfuncs = (void *)&pf;

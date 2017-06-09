@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 23:40:06 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 14:23:25 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -57,6 +57,7 @@ BOOL             use_cbuf(t_circular_buf **cbuf)
 {
   while (!(*cbuf)->is_empty /*&& (*cbuf)->pollfd->revents == POLLOUT*/)
   {
+    printf("fd to write %d\n", (*cbuf)->client_fd);
     if (!send_str_to_client((*cbuf)->client_fd, (*cbuf)->rfc_msg))
       perror("send_str_to_client()");
     (*cbuf)->is_empty = TRUE;
@@ -65,7 +66,7 @@ BOOL             use_cbuf(t_circular_buf **cbuf)
       (*cbuf)->next->end = NULL;
     else
       (*cbuf)->next->end = (*cbuf)->end;
-    (*cbuf)->pollfd->events = POLLIN;
+    //(*cbuf)->pollfd->events = POLLIN;
     (*cbuf)++;
   }
   return (TRUE);
