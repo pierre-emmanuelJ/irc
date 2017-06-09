@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 18:18:02 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 18:23:20 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -29,7 +29,7 @@ BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cl
   argv = split_str(command, ' ');
   call_function((t_pf *)serv->pfuncs, argv, serv, cli);
   asprintf(result, "command = %s fd = %d", argv[0], cli->client_fd);
-  free(command);
+  free(argv);
   return (TRUE);
 }
 
@@ -38,7 +38,7 @@ void        exec_lines(t_server_infos *serv,
                        t_client_infos *cli)
 {
   char      **lines;
-  char       **tmp;
+  char      **tmp;
 
   lines = split_str(serv->input, '\n');
   tmp = lines;
