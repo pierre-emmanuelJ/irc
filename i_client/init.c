@@ -10,12 +10,12 @@
 
 #include "client.h"
 
-void init_ncurses(t_windows *w, t_client *c)
+void init_ncurses(void)
 {
   initscr();
   cbreak();
   noecho();
-  curs_set(FALSE);
+  curs_set(TRUE);
   keypad(stdscr, TRUE);
   if (has_colors())
   {
@@ -29,6 +29,25 @@ void init_ncurses(t_windows *w, t_client *c)
 void init_values(t_client *c)
 {
   time_writter(c);
-  asprintf(&c->nickname, "none");
+  asprintf(&c->nickname, DEFAULT_NICKNAME);
   asprintf(&c->hostname, "none");
+}
+
+void init_body(t_windows *w, t_client *c)
+{
+  time_writter(c);
+  wprintw(w->body,
+  "%s -  _____   _    ____   ___ _   _ ____   ____ \n", c->time);
+  wprintw(w->body,
+  "%s - |__  /  / \\  |  _ \\ / _ (_)_(_)  _ \\ / ___|\n", c->time);
+  wprintw(w->body,
+  "%s -   / /  / _ \\ | |_) | | | |_ _|| |_) | |    \n", c->time);
+  wprintw(w->body,
+  "%s -  / /_ / ___ \\|  __/| |_| || | |  _ <| |___ \n", c->time);
+  wprintw(w->body,
+  "%s - /____/_/   \\_\\_|    \\___/|___||_| \\_\\____|\n", c->time);
+  wprintw(w->body,
+  "---------------------------------------------------\n", c->time);
+  wprintw(w->body, "%s - %s\n", c->time, DEFAULT_HEADER);
+  wrefresh(w->body);
 }
