@@ -8,7 +8,11 @@
 ** Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
 */
 
-#ifndef COMMANDS_H_
-# define COMMANDS_H_
+#include "client.h"
 
-#endif /* !COMMANDS_H_ */
+void unknow_command(t_windows *w, t_client *c)
+{
+  wprintw(w->body, "%s - ZAPOIRC: Unknown command: %s\n",
+  c->time, c->textbox);
+  wrefresh(w->body);
+}

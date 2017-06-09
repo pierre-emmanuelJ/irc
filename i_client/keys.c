@@ -10,13 +10,41 @@
 
 #include "client.h"
 
-void keybindings(int ch, t_windows *w, t_client *c)
+void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
 {
+  t_command *current;
+
+  (void)keybindings;
   if (ch == 127 || ch == 8)
   {
+    c->textbox[strlen(c->textbox)-1] = 0;
     mvwdelch(w->textbox, getcury(w->textbox), getcurx(w->textbox)-1);
   }
+  else if (ch == 10)
+  {
+    wprintw(w->body, "%s - %s\n", c->time, c->textbox);
+    wrefresh(w->body);
+    if (c->textbox[0] == '/')
+    {
+      current = cmd;
+      while (current != NULL)
+      {
+        if (strstr(c->textbox, current->command))
+        {
+          current->ptr(c->textbox, w, c);
+          return ;
+        }
+        current = current->next;
+      }
+      unknow_command(w, c);
+    }
+    clear_line(w->textbox, c);
+  }
   else if (isprint(ch))
-    waddstr(w->textbox, "a");
+  {
+    asprintf(&c->ch, "%c", ch);
+    asprintf(&c->textbox, "%s%s", c->textbox, c->ch);
+    waddstr(w->textbox, c->ch);
+  }
   wrefresh (w->textbox);
 }

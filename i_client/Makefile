@@ -20,7 +20,20 @@ SRC	= main.c \
 			utils.c \
 			init.c \
 			windows.c \
-			keys.c
+			keys.c \
+			init_linked_list.c \
+			custom_functions.c \
+			irc_join.c \
+			irc_list.c \
+			irc_msg.c \
+			irc_names.c \
+			irc_nickname.c \
+			irc_part.c \
+			irc_server.c \
+			irc_users.c \
+			irc_utils.c \
+			errors.c \
+			refresh.c
 
 OBJS = $(SRC:.c=.o)
 
