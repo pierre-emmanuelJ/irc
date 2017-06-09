@@ -19,8 +19,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
-#define DEFAULT_USER "francis kuntz"
+#define DEFAULT_NICKNAME "francis_kuntz"
+#define DEFAULT_HEADER "Welcome on ZAPOIIIIRC v0.8 RC2 - http://fifigrot.com/"
 
 typedef struct  s_windows {
   WINDOW        *header;
@@ -33,20 +35,24 @@ typedef struct  s_client {
   char          *time;
   char          *nickname;
   char          *hostname;
+  char          *header;
+  char          *textbox;
 }               t_client;
 
 /* utils.c */
 void time_writter(t_client *c);
 
 /* init.c */
-void init_ncurses(t_windows *w, t_client *c);
+void init_ncurses(void);
 void init_values(t_client *c);
-
-/* utils.c */
+void init_body(t_windows *w, t_client *c);
 
 /* windows.c */
 WINDOW    *create_window(int h, int w, int y, int x);
 void      destroy_windows(t_windows *w);
 void      assign_windows(t_windows *w, t_client *c);
+
+/* keys.c */
+void keybindings(int ch, t_windows *w, t_client *c);
 
 #endif /* !CLIENT_IRC_H__ */
