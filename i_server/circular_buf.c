@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 23:40:06 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 21:38:34 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   tmp = *cbuf;
   if (!tmp->end)
   {
-    tmp->rfc_msg = result;
+    asprintf(&tmp->rfc_msg, "%s", result);
     tmp->client_fd = cli->client_fd;
     tmp->is_empty = FALSE;
     tmp->pollfd = pollfd;
@@ -35,7 +35,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     (*cbuf)->end = tmp->end;
     tmp = tmp->end;
     tmp->start = *cbuf;
-    tmp->rfc_msg = result;
+    asprintf(&tmp->rfc_msg, "%s", result);
     tmp->pollfd = pollfd;
     tmp->client = cli;
     tmp->client_fd = cli->client_fd;
@@ -43,7 +43,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     return (TRUE);
   }
   tmp = tmp->end;
-  tmp->rfc_msg = result;
+  asprintf(&tmp->rfc_msg, "%s", result);
   tmp->client_fd = cli->client_fd;
   tmp->is_empty = FALSE;
   tmp->pollfd = pollfd;
@@ -53,12 +53,15 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   return (TRUE);
 }
 
-BOOL             use_cbuf(t_circular_buf **cbuf)
+BOOL             use_cbuf(t_circular_buf **cbuf,
+                          t_server_infos *serv)
 {
+  char           *result;
+
   while (!(*cbuf)->is_empty /*&& (*cbuf)->pollfd->revents == POLLOUT*/)
   {
-    if (!send_str_to_client((*cbuf)->client_fd, (*cbuf)->rfc_msg))
-      perror("send_str_to_client()");
+    exec_command((*cbuf)->rfc_msg, serv, (*cbuf)->client, &result);
+    send_str_to_client((*cbuf)->client->client_fd, result);
     (*cbuf)->is_empty = TRUE;
     free((*cbuf)->rfc_msg);
     if ((*cbuf)->end == (*cbuf)->next)

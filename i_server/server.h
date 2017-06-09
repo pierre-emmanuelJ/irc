@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Thu Jun  8 18:05:16 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 18:17:43 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -34,7 +34,7 @@
 
 # define FAILURE (84)
 # define MAX_FD (sysconf(_SC_OPEN_MAX))
-# define MAX_CLI (MAX_FD)
+# define MAX_CLI (1024)
 # define BOOL t_bool
 # define TIMEOUT (3 * 60 * 1000)
 # define NB_COMMANDS (5)
@@ -59,17 +59,6 @@ typedef struct          s_chanel
   struct pollfd         **fds_in_chanel;
 }                       t_chanel;
 
-typedef struct          s_server_infos
-{
-  struct protoent       *pe;
-  int                   fd;
-  struct sockaddr_in    s_in;
-  int                   port;
-  struct pollfd         *clients;
-  void                  *pfuncs;
-  t_chanel              *chanels;
-}                       t_server_infos;
-
 typedef struct          s_client_infos
 {
   struct sockaddr_in    s_in_client;
@@ -80,7 +69,6 @@ typedef struct          s_client_infos
   char                  *nickname;
   t_chanel              **chanels;
   t_chanel              *cur_chanel;
-  FILE                  *fp;
   struct pollfd         *pollfd;
 }                       t_client_infos;
 
@@ -96,6 +84,19 @@ typedef struct          s_circular_buf
   struct s_circular_buf *start;
   struct s_circular_buf *end;
 }                       t_circular_buf;
+
+typedef struct          s_server_infos
+{
+  struct protoent       *pe;
+  int                   fd;
+  struct sockaddr_in    s_in;
+  int                   port;
+  struct pollfd         *clients;
+  void                  *pfuncs;
+  t_chanel              *chanels;
+  t_circular_buf        *cbuf;
+  char                  *input;
+}                       t_server_infos;
 
 typedef struct          end_prg
 {
@@ -117,8 +118,9 @@ BOOL     is_number(char *number);
 BOOL     create_socket(t_server_infos *);
 BOOL     server_listen(t_server_infos *);
 BOOL     server_accept(t_server_infos *, t_client_infos *);
-BOOL     data_client_receive(t_server_infos *, t_client_infos *, t_circular_buf *);
+BOOL     data_client_receive(t_server_infos *, t_client_infos *);
 BOOL     send_str_to_client(int client_fd, const char *msg);
+BOOL     exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result);
 
 /*
 ** circular buffer
@@ -129,7 +131,9 @@ BOOL           add_in_cbuf(t_circular_buf **cbuf,
                            struct pollfd *pollfd,
                            t_client_infos *cli,
                            char *result);
-BOOL             use_cbuf(t_circular_buf **cbuf);
+BOOL             use_cbuf(t_circular_buf **cbuf,
+                          t_server_infos *serv);
+
 
 /*
 ** malloc memory verification

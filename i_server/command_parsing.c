@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun May 21 17:51:36 2017 Pierre-Emmanuel Jacquier
-** Last update Mon Jun  5 22:13:39 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 15:59:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -17,7 +17,7 @@ void    remove_crlf(char *str)
   str_len = strlen(str);
   if (str[str_len - 1] == '\n' && str[str_len - 2] == '\r')
     str[str_len - 2] = 0;
-  else if (str[str_len - 1] == '\n')
+  else if (str[str_len - 1] == '\n' || str[str_len - 1] == '\r')
     str[str_len - 1] = 0;
 }
 
