@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 21:40:56 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 21:48:20 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -54,23 +54,6 @@ void        exec_lines(t_server_infos *serv,
   free(tmp);
 }
 
-void       print_pollfd(struct pollfd *pollfd)
-{
-  int i = 1;
-
-  printf("pollfd tab [");
-  while (i < MAX_CLI && pollfd[i].fd != 0)
-  {
-    if (pollfd[i].fd > 0 && pollfd[i].revents == POLLIN)
-    {
-      printf(" %d,", pollfd[i].fd);
-      fflush(stdout);
-    }
-    i++;
-  }
-  printf("]\n");
-}
-
 BOOL        data_client_receive(t_server_infos *serv,
                                 t_client_infos *cli)
 {
@@ -79,21 +62,15 @@ BOOL        data_client_receive(t_server_infos *serv,
   int       len;
 
   i = 1;
-  print_pollfd(serv->clients);
   while (i < MAX_CLI && serv->clients[i].fd != 0)
   {
     if (serv->clients[i].fd > 0 && serv->clients[i].revents == POLLIN)
       {
-        printf("%s\n", "before read!!");
         if (!(len = read(serv->clients[i].fd, input, 1024)))
         {
           remove_client(serv->clients, cli, i++);
-          printf("client parrttttt\n");
-          sleep(5);
           continue ;
         }
-        printf("readed %d\n", len);
-        printf("%s\n", "after read!!");
         input[len] = 0;
         remove_crlf(input);
         if (!strcmp(input, ""))
@@ -106,7 +83,6 @@ BOOL        data_client_receive(t_server_infos *serv,
       }
     i++;
   }
-  printf("%s\n", "........out");
   return (TRUE);
 }
 
@@ -153,15 +129,11 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
 
   while (1)
   {
-    printf("%s\n", "before poll");
-    printf("nb%lu\n", count_pollfds(server_infos->clients));
     if ((event = poll(server_infos->clients, count_pollfds(server_infos->clients), TIMEOUT)) < 0)
     {
       perror("poll() failed");
       break ;
     }
-    print_pollfd(server_infos->clients);
-    printf("%s\n", "after poll");
     if (!event)
     {
       fprintf(stderr, "poll() timed out. End program.\n");
