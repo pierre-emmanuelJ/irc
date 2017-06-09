@@ -19,7 +19,8 @@ CFLAGS	= -Wall -Wextra -g
 SRC	= main.c \
 			utils.c \
 			init.c \
-			windows.c
+			windows.c \
+			keys.c
 
 OBJS = $(SRC:.c=.o)
 
