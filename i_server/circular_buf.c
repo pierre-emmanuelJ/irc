@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 18:17:28 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 21:38:34 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -68,7 +68,7 @@ BOOL             use_cbuf(t_circular_buf **cbuf,
       (*cbuf)->next->end = NULL;
     else
       (*cbuf)->next->end = (*cbuf)->end;
-    //(*cbuf)->pollfd->events = POLLIN;
+    (*cbuf)->pollfd->events = POLLIN;
     (*cbuf)++;
   }
   return (TRUE);
