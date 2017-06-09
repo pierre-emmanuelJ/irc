@@ -17,5 +17,18 @@ void          time_writter(t_client *c)
 
   now = time(NULL);
   ntm = localtime(&now);
-  asprintf(&c->time, "%d:%d", ntm->tm_hour, ntm->tm_min);
+  if (ntm->tm_min <= 9)
+  {
+    if (ntm->tm_hour <= 9)
+      asprintf(&c->time, "0%d:0%d", ntm->tm_hour, ntm->tm_min);
+    else
+      asprintf(&c->time, "%d:0%d", ntm->tm_hour, ntm->tm_min);
+  }
+  else
+  {
+    if (ntm->tm_hour <= 9)
+      asprintf(&c->time, "0%d:%d", ntm->tm_hour, ntm->tm_min);
+    else
+      asprintf(&c->time, "%d:%d", ntm->tm_hour, ntm->tm_min);
+  }
 }
