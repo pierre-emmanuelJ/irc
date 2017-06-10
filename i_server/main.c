@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 15:24:23 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 16:12:49 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -28,7 +28,6 @@ BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cl
 
   argv = split_str(command, ' ');
   call_function((t_pf *)serv->pfuncs, argv, serv, cli);
-  asprintf(result, "command = %s fd = %d", argv[0], cli->client_fd);
   free(argv);
   return (TRUE);
 }
@@ -137,7 +136,7 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
     if (!event)
     {
       fprintf(stderr, "poll() timed out. End program.\n");
-      break ;
+      continue ;
     }
     if (server_infos->clients[0].revents == POLLIN)
     {
