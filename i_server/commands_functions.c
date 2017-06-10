@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 21:54:09 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 23:21:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -48,7 +48,7 @@ BOOL     user_command(char **command, t_server_infos *serv, t_client_infos *cli)
   }
   if (!cli->nickname)
     send_str_to_client(cli->client_fd, "001 :Welcome");
-  asprintf(&cli->user, "%s %s %s %s", command[1], command[2], command[3], command[4]);
+  asprintf(&cli->user, "%s", command[1]);
   return (TRUE);
 }
 
@@ -112,6 +112,7 @@ void     send_msg_to_chanel(t_chanel *chan, char *msg)
 BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *cli)
 {
   int    i;
+  char   *msg;
 
   printf("PRIVMSG\n");
   i = 0;
@@ -126,7 +127,8 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
   {
     if (!strcmp(cli->chanels[i]->chanel_name, command[1]))
     {
-      send_msg_to_chanel(cli->chanels[i], command[2]);
+      asprintf(&msg, ":%s!%s@%s PRIVMSG %s :%s", cli->nickname, cli->user, cli->client_ip, cli->chanels[i]->chanel_name, command[2]);
+      send_msg_to_chanel(cli->chanels[i], msg);
     }
     i++;
   }
