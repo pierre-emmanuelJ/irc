@@ -24,7 +24,7 @@ static void   refresh_header(t_windows *w, t_client *c)
   mvwdelch(w->header, getcury(w->header), 0);
   wclrtoeol(w->header);
   mvwprintw(w->header, 0, 0, " * ZAPOIIIRC * Connected on %s using %s",
-  c->hostname, c->nickname);
+  c->ip, c->nickname);
   wrefresh(w->header);
 }
 

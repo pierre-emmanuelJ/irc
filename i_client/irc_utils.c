@@ -27,6 +27,7 @@ void command_quit(char *str, t_windows *w, t_client *c)
   timer = 3;
   if (compare_strict_command(str, "/quit", w, c) == FALSE)
     return ;
+  clear_line(w->textbox, c);
   while (timer != 0)
   {
     wprintw(w->body, "%s - Exit ZAPOIIIRC in %d...\n", c->time, timer);
