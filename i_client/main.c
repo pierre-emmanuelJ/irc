@@ -23,7 +23,7 @@ static void   main_process(t_windows *w, t_client *c)
   while (42)
   {
     time_writter(c);
-    refresh_footer(w, c);
+    refresh_windows(w, c);
     keybindings(wgetch(w->textbox), w, c, cmd);
   }
   destroy_windows(w);

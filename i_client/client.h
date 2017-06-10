@@ -45,13 +45,6 @@ typedef struct  s_windows {
   WINDOW        *textbox;
 }               t_windows;
 
-typedef struct  s_stock
-{
-  int           socket;
-  int           port;
-  char          ip[IP_SIZE];
-}               t_stock;
-
 typedef struct  s_client {
   char          *time;
   char          *nickname;
@@ -63,7 +56,8 @@ typedef struct  s_client {
   char          *params;
   int           socket;
   fd_set        fset;
-  t_stock       stock;
+  int           port;
+  char          *ip;
 }               t_client;
 
 typedef void  (*funcptr)(char *params, t_windows *w, t_client *c);
@@ -117,12 +111,18 @@ void command_accept(char *str, t_windows *w, t_client *c);
 /* errors;c */
 void unknow_command(t_windows *w, t_client *c);
 void need_connection(t_windows *w, t_client *c);
+void cant_connect(t_windows *w, t_client *c);
+void cant_resolve(t_windows *w, t_client *c);
 
 /* refresh.c */
-void refresh_footer(t_windows *w, t_client *c);
+void refresh_windows(t_windows *w, t_client *c);
 
 /* irc_tools.c */
 BOOL compare_strict_command(char *s1, char*s2, t_windows *w, t_client *c);
 BOOL compare_cnts_command(char *s1, char*s2, t_windows *w, t_client *c, int n);
+
+/* init_connection.c */
+int       handle_client(t_client *c, t_windows *w);
+void      close_channel(t_client *c, int nb_socket);
 
 #endif /* !CLIENT_IRC_H__ */

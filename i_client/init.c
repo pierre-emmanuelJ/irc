@@ -30,9 +30,13 @@ void init_values(t_client *c)
 {
   time_writter(c);
   asprintf(&c->nickname, DEFAULT_NICKNAME);
-  asprintf(&c->hostname, "none");
+  asprintf(&c->hostname, " ");
   asprintf(&c->textbox, " ");
   asprintf(&c->ch, " ");
+  c->hostname[0] = 0;
+  c->textbox[0] = 0;
+  c->ch[0] = 0;
+  c->port = 6667;
   c->st = DISCONNECTED;
 }
 
