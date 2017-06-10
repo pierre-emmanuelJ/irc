@@ -32,6 +32,7 @@ void init_values(t_client *c)
   asprintf(&c->nickname, DEFAULT_NICKNAME);
   asprintf(&c->hostname, " ");
   asprintf(&c->textbox, " ");
+  asprintf(&c->channel, "none");
   asprintf(&c->ch, " ");
   c->hostname[0] = 0;
   c->textbox[0] = 0;
@@ -58,4 +59,11 @@ void init_body(t_windows *w, t_client *c)
   wprintw(w->body, "%s - %s\n", c->time, DEFAULT_HEADER);
   scrollok(w->body, 1);
   wrefresh(w->body);
+}
+
+void init_select(t_client *c)
+{
+  FD_ZERO(&(c->fset));
+  FD_SET(c->socket, &(c->fset));
+  c->tm.tv_usec = 100;
 }

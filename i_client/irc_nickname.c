@@ -12,10 +12,18 @@
 
 void command_nick(char *str, t_windows *w, t_client *c)
 {
-  if (compare_cnts_command(str, "/nick" ,w, c, 6) == FALSE)
+  if (compare_cnts_command(str, "/nick " ,w, c, 5) == FALSE)
     return ;
   if (c->st == CONNECTED)
   {
+    if (strlen(c->params) <= 0)
+    {
+      no_parameters(w, c);
+      return ;
+    }
+    asprintf(&c->tosend, "USER %s", c->params);
+    asprintf(&c->tosend, "NICK %s", c->params);
+    write(c->socket, c->tosend, strlen(c->tosend));
     asprintf(&c->nickname, "%s", c->params);
   }
   else
