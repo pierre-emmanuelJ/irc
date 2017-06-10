@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 01:10:35 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 15:03:52 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -50,8 +50,8 @@ BOOL     quit_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-  // cli->client_fd = -1;
-  // cli->pollfd->fd = -1;
+  cli->client_fd = -1;
+  cli->pollfd->fd = -1;
   close(cli->client_fd);
   return (TRUE);
 }

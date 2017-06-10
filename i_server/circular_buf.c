@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 22:24:14 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 15:10:02 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -29,7 +29,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     tmp->end->start = tmp;
     return (TRUE);
   }
-  if (tmp->end == tmp->start)
+  if (tmp->end == tmp)
   {
     *cbuf = (*cbuf)->next;
     (*cbuf)->end = tmp->end;
@@ -49,7 +49,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   tmp->pollfd = pollfd;
   tmp->client = cli;
   tmp->start = *cbuf;
-  (*cbuf)->end = tmp;
+  (*cbuf)->end = tmp->next;
   return (TRUE);
 }
 
