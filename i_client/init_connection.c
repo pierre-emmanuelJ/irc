@@ -10,7 +10,7 @@
 
 #include "client.h"
 
-int       handle_client(t_client *c, t_windows *w)
+int       handle_client(t_client *c)
 {
   int     fd;
   int     is_on;
