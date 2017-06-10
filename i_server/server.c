@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 21:59:58 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 16:37:18 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -73,6 +73,8 @@ BOOL     server_accept(t_server_infos *server_infos, t_client_infos *clients)
     server_infos->clients[poll_pos].events = POLLIN;
     memcpy(&clients[poll_pos], &cli, sizeof(cli));
     clients[poll_pos].pollfd = &server_infos->clients[poll_pos];
+    clients[poll_pos].chanels = vmalloc(sizeof(t_chanel *) * MAX_CLI);
+    memset(clients[poll_pos].chanels, 0, sizeof(t_chanel *) * MAX_CLI);
   }
   return (TRUE);
 }

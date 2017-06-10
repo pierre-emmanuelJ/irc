@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 16:57:43 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 18:08:28 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 18:57:32 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef COMMANDS_H_
@@ -16,6 +16,10 @@ static char *g_commands_list[] = {
   "USER",
   "PING",
   "PONG",
-  "QUIT"};
+  "QUIT",
+  "PRIVMSG",
+  "JOIN",
+  "PART",
+  "LIST"};
 
 #endif /* !COMMANDS_H_ */

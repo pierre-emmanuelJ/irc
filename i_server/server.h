@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 15:11:07 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 18:58:02 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -37,7 +37,7 @@
 # define MAX_CLI (1024)
 # define BOOL t_bool
 # define TIMEOUT (3 * 60 * 1000)
-# define NB_COMMANDS (5)
+# define NB_COMMANDS (9)
 
 /*
 ** yan typedef socklen_t
@@ -67,8 +67,8 @@ typedef struct          s_client_infos
   char                  *client_ip;
   int                   client_port;
   char                  *nickname;
+  char                  *user;
   t_chanel              **chanels;
-  t_chanel              *cur_chanel;
   struct pollfd         *pollfd;
 }                       t_client_infos;
 
