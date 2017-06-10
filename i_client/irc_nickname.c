@@ -14,7 +14,7 @@ void command_nick(char *str, t_windows *w, t_client *c)
 {
   if (compare_cnts_command(str, "/nick" ,w, c, 6) == FALSE)
     return ;
-  if (c->st != CONNECTED)
+  if (c->st == CONNECTED)
   {
     asprintf(&c->nickname, "%s", c->params);
   }

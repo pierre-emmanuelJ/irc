@@ -10,9 +10,3 @@
 
 #include "client.h"
 
-void command_server(char *str, t_windows *w, t_client *c)
-{
-  if (compare_cnts_command(str, "/server" ,w, c, 8) == FALSE)
-    return ;
-
-}

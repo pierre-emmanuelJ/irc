@@ -14,7 +14,7 @@ RM = rm -rf
 
 TARGET = client
 
-CFLAGS	= -Wall -Wextra -g
+CFLAGS	= -Wall -Wextra -g -D _GNU_SOURCE
 
 SRC	= main.c \
 			utils.c \
