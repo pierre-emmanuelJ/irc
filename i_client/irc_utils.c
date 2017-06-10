@@ -12,11 +12,8 @@
 
 void command_help(char *str, t_windows *w, t_client *c)
 {
-  if (strcmp(str, "/help") != 0)
-  {
-    unknow_command(w, c);
-    return ((void)clear_line(w->textbox, c));
-  }
+  if (compare_strict_command(str, "/help", w, c) == FALSE)
+    return ;
   wprintw(w->body, "%s - server\tnick\tlist\tjoin\n", c->time);
   wprintw(w->body, "%s - part\tusers\tnames\tmsg\n", c->time);
   wprintw(w->body, "%s - help\tquit\n", c->time);
@@ -28,11 +25,8 @@ void command_quit(char *str, t_windows *w, t_client *c)
   int timer;
 
   timer = 3;
-  if (strcmp(str, "/quit") != 0)
-  {
-    unknow_command(w, c);
-    return ((void)clear_line(w->textbox, c));
-  }
+  if (compare_strict_command(str, "/quit", w, c) == FALSE)
+    return ;
   while (timer != 0)
   {
     wprintw(w->body, "%s - Exit ZAPOIIIRC in %d...\n", c->time, timer);

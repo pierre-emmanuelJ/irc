@@ -32,6 +32,7 @@ void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
         if (strstr(c->textbox, current->command))
         {
           current->ptr(c->textbox, w, c);
+          clear_line(w->textbox, c);
           return ;
         }
         current = current->next;
