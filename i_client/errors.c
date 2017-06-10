@@ -16,3 +16,10 @@ void unknow_command(t_windows *w, t_client *c)
   c->time, c->textbox);
   wrefresh(w->body);
 }
+
+void need_connection(t_windows *w, t_client *c)
+{
+  wprintw(w->body, "%s - ZAPOIRC: Not connected to server\n",
+  c->time);
+  wrefresh(w->body);
+}

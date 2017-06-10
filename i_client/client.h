@@ -48,6 +48,7 @@ typedef struct  s_client {
   char          *textbox;
   char          *ch;
   STATUS        st;
+  char          *params;
 }               t_client;
 
 typedef void  (*funcptr)(char *params, t_windows *w, t_client *c);
@@ -100,11 +101,13 @@ void command_accept(char *str, t_windows *w, t_client *c);
 
 /* errors;c */
 void unknow_command(t_windows *w, t_client *c);
+void need_connection(t_windows *w, t_client *c);
 
 /* refresh.c */
 void refresh_footer(t_windows *w, t_client *c);
 
 /* irc_tools.c */
-BOOL compare_command(char *s1, char*s2, t_windows *w, t_client *c);
+BOOL compare_strict_command(char *s1, char*s2, t_windows *w, t_client *c);
+BOOL compare_cnts_command(char *s1, char*s2, t_windows *w, t_client *c, int n);
 
 #endif /* !CLIENT_IRC_H__ */

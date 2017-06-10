@@ -12,7 +12,7 @@
 
 void command_help(char *str, t_windows *w, t_client *c)
 {
-  if (compare_command(str, "/help", w, c) == FALSE)
+  if (compare_strict_command(str, "/help", w, c) == FALSE)
     return ;
   wprintw(w->body, "%s - server\tnick\tlist\tjoin\n", c->time);
   wprintw(w->body, "%s - part\tusers\tnames\tmsg\n", c->time);
@@ -25,7 +25,7 @@ void command_quit(char *str, t_windows *w, t_client *c)
   int timer;
 
   timer = 3;
-  if (compare_command(str, "/quit", w, c) == FALSE)
+  if (compare_strict_command(str, "/quit", w, c) == FALSE)
     return ;
   while (timer != 0)
   {
