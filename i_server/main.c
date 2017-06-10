@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 16:12:49 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 17:47:02 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -20,12 +20,16 @@ void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
   fds[index].fd = -1;
   memset(&cli[index], 0, sizeof(t_client_infos));
   cli[index].client_fd = -1;
+  if (cli[index].chanels)
+    free(cli[index].chanels);
+  free(cli[index].nickname);
 }
 
 BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result)
 {
   char     **argv;
 
+  (void)result;
   argv = split_str(command, ' ');
   call_function((t_pf *)serv->pfuncs, argv, serv, cli);
   free(argv);
@@ -143,7 +147,6 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
       server_accept(server_infos, clients);
       continue ;
     }
-    //request_to_write(server_infos);
     data_client_receive(server_infos, clients);
     use_cbuf(&server_infos->cbuf, server_infos);
   }
