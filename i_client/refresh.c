@@ -12,6 +12,8 @@
 
 void refresh_footer(t_windows *w, t_client *c)
 {
+  mvwdelch(w->footer, getcury(w->footer), 0);
+  wclrtoeol(w->footer);
   mvwprintw(w->footer, 0, 0, "[%s] [%s] [%s]",
   c->time, c->nickname, c->hostname);
   wrefresh(w->footer);

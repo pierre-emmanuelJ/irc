@@ -33,7 +33,8 @@ SRC	= main.c \
 			irc_users.c \
 			irc_utils.c \
 			errors.c \
-			refresh.c
+			refresh.c \
+			irc_tools.c
 
 OBJS = $(SRC:.c=.o)
 

@@ -33,6 +33,7 @@ void init_values(t_client *c)
   asprintf(&c->hostname, "none");
   asprintf(&c->textbox, " ");
   asprintf(&c->ch, " ");
+  c->st = DISCONNECTED;
 }
 
 void init_body(t_windows *w, t_client *c)

@@ -11,19 +11,27 @@
 #ifndef CLIENT_IRC_H__
 # define CLIENT_IRC_H__
 
-#include <unistd.h>
-#include <ncurses.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+# include <unistd.h>
+# include <ncurses.h>
+# include <stdlib.h>
+# include <time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <ctype.h>
+# include <string.h>
 
-#define _GNU_SOURCE
+# define _GNU_SOURCE
 
-#define DEFAULT_NICKNAME "francis_kuntz"
-#define DEFAULT_HEADER "Welcome on ZAPOIIIIRC v0.8 RC2 - http://fifigrot.com/"
+# define DEFAULT_NICKNAME "francis_kuntz"
+# define DEFAULT_HEADER "Welcome on ZAPOIIIIRC v0.8 RC2 - http://fifigrot.com/"
+# define BOOL _Bool
+# define STATUS t_status
+
+typedef enum  s_status
+{
+  CONNECTED,
+  DISCONNECTED
+}             t_status;
 
 typedef struct  s_windows {
   WINDOW        *header;
@@ -39,8 +47,8 @@ typedef struct  s_client {
   char          *header;
   char          *textbox;
   char          *ch;
+  STATUS        st;
 }               t_client;
-
 
 typedef void  (*funcptr)(char *params, t_windows *w, t_client *c);
 
@@ -95,5 +103,8 @@ void unknow_command(t_windows *w, t_client *c);
 
 /* refresh.c */
 void refresh_footer(t_windows *w, t_client *c);
+
+/* irc_tools.c */
+BOOL compare_command(char *s1, char*s2, t_windows *w, t_client *c);
 
 #endif /* !CLIENT_IRC_H__ */
