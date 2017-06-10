@@ -8,7 +8,13 @@
 ** Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
 */
 
-#ifndef COMMANDS_H_
-# define COMMANDS_H_
+#include "client.h"
 
-#endif /* !COMMANDS_H_ */
+int compare_command(char *s1, char*s2)
+{
+  if (strcmp(str, "/help") != 0)
+  {
+    unknow_command(w, c);
+    return ((void)clear_line(w->textbox, c));
+  }
+}

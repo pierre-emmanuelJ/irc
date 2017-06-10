@@ -16,7 +16,7 @@ void init_ncurses(void)
   cbreak();
   noecho();
   curs_set(TRUE);
-  keypad(stdscr, TRUE);
+  keypad(stdscr, FALSE);
   if (has_colors())
   {
     start_color();
@@ -31,6 +31,8 @@ void init_values(t_client *c)
   time_writter(c);
   asprintf(&c->nickname, DEFAULT_NICKNAME);
   asprintf(&c->hostname, "none");
+  asprintf(&c->textbox, " ");
+  asprintf(&c->ch, " ");
 }
 
 void init_body(t_windows *w, t_client *c)
@@ -49,5 +51,6 @@ void init_body(t_windows *w, t_client *c)
   wprintw(w->body,
   "---------------------------------------------------\n", c->time);
   wprintw(w->body, "%s - %s\n", c->time, DEFAULT_HEADER);
+  scrollok(w->body, 1);
   wrefresh(w->body);
 }

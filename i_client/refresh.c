@@ -8,7 +8,12 @@
 ** Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
 */
 
-#ifndef COMMANDS_H_
-# define COMMANDS_H_
+#include "client.h"
 
-#endif /* !COMMANDS_H_ */
+void refresh_footer(t_windows *w, t_client *c)
+{
+  mvwprintw(w->footer, 0, 0, "[%s] [%s] [%s]",
+  c->time, c->nickname, c->hostname);
+  wrefresh(w->footer);
+  wrefresh(w->textbox);
+}

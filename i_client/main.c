@@ -10,16 +10,21 @@
 
 #include "client.h"
 
-static void main_process(t_windows *w, t_client *c)
+static void   main_process(t_windows *w, t_client *c)
 {
+  t_command   *cmd;
+
   w = malloc(sizeof(t_windows));
   c = malloc(sizeof(t_client));
+  cmd = lets_init_linkedlist();
   init_values(c);
   assign_windows(w, c);
   init_body(w, c);
   while (42)
   {
-    keybindings(wgetch(w->textbox), w, c);
+    time_writter(c);
+    refresh_footer(w, c);
+    keybindings(wgetch(w->textbox), w, c, cmd);
   }
   destroy_windows(w);
   free(w);

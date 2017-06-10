@@ -25,6 +25,8 @@ void      destroy_windows(t_windows *w)
   delwin(w->body);
   delwin(w->footer);
   delwin(w->textbox);
+  endwin();
+  exit(EXIT_SUCCESS);
 }
 
 void      assign_windows(t_windows *w, t_client *c)
@@ -44,4 +46,11 @@ void      assign_windows(t_windows *w, t_client *c)
   w->textbox = create_window(1, COLS, LINES - 1, 0);
   wbkgd(w->textbox, COLOR_PAIR(1));
   wrefresh(w->textbox);
+}
+
+void      clear_line(WINDOW *w, t_client *c)
+{
+  mvwdelch(w, getcury(w), 0);
+  wclrtoeol(w);
+  strcpy(c->textbox, "");
 }
