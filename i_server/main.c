@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 01:17:38 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 15:11:47 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -145,7 +145,9 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
       continue ;
     }
     //request_to_write(server_infos);
+    printf("cbuf before read = %p\n", server_infos->cbuf);
     data_client_receive(server_infos, clients);
+    printf("cbuf after read = %p\n", server_infos->cbuf);
     use_cbuf(&server_infos->cbuf, server_infos);
   }
   return (TRUE);

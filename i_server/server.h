@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 18:17:43 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 15:11:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
