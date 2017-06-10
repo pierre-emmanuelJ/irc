@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 21:38:34 2017 Pierre-Emmanuel Jacquier
+** Last update Fri Jun  9 22:24:14 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -61,7 +61,7 @@ BOOL             use_cbuf(t_circular_buf **cbuf,
   while (!(*cbuf)->is_empty /*&& (*cbuf)->pollfd->revents == POLLOUT*/)
   {
     exec_command((*cbuf)->rfc_msg, serv, (*cbuf)->client, &result);
-    send_str_to_client((*cbuf)->client->client_fd, result);
+    //send_str_to_client((*cbuf)->client->client_fd, result);
     (*cbuf)->is_empty = TRUE;
     free((*cbuf)->rfc_msg);
     if ((*cbuf)->end == (*cbuf)->next)

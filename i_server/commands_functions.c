@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 17:18:07 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 01:10:35 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -16,7 +16,6 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-
   return (TRUE);
 }
 
@@ -25,7 +24,7 @@ BOOL     user_command(char **command, t_server_infos *serv, t_client_infos *cli)
   (void)command;
   (void)serv;
   (void)cli;
-
+  send_str_to_client(cli->client_fd, "001 :Welcome");
   return (TRUE);
 }
 
