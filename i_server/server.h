@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 18:58:02 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 20:20:39 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -142,5 +142,21 @@ void           *vmalloc(size_t size);
 void           epure_str(char *str, int str_len);
 char           **split_str(char *str, int delim);
 void           remove_crlf(char *str);
+
+/*
+** chanels
+*/
+void           add_new_chanel(const char *chanel_name,
+                              t_server_infos *serv,
+                              t_client_infos *cli);
+BOOL           chanel_exist(const char *chanel_name,
+                            t_server_infos *serv);
+void           add_cli_to_chanel(const char *chanel_name,
+                                 t_server_infos *serv,
+                                 t_client_infos *cli);
+void    remove_cli_from_chanel(const char *chanel_name,
+                               t_server_infos *serv,
+                               t_client_infos *cli);
+void    remove_cli_from_his_chanels(t_client_infos *cli);
 
 #endif /* !MYIRC_H_ */

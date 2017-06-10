@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 17:47:02 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 20:39:13 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -16,6 +16,7 @@ t_end_prg g_end_prg;
 void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
   printf("client %s:%d leave\n", cli[index].client_ip, cli[index].client_port);
+  remove_cli_from_his_chanels(&cli[index]);
   close(fds[index].fd);
   fds[index].fd = -1;
   memset(&cli[index], 0, sizeof(t_client_infos));
@@ -159,7 +160,7 @@ static BOOL         init_data_server(t_server_infos *server_infos)
   t_client_infos    clients[MAX_CLI];
   t_chanel          chanels[MAX_CLI];
 
-  memset(chanels, 0, sizeof(chanels));
+  memset(chanels, 0, sizeof(t_chanel) * MAX_CLI);
   server_infos->chanels = chanels;
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);

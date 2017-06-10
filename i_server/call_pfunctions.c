@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 16:57:32 2017 Pierre-Emmanuel Jacquier
-** Last update Wed Jun  7 19:09:28 2017 Pierre-Emmanuel Jacquier
+** Last update Sat Jun 10 19:24:32 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -19,6 +19,10 @@ void    init_tpsf_tab(t_pf *pf)
   pf->commands[2] = &ping_command;
   pf->commands[3] = &pong_command;
   pf->commands[4] = &quit_command;
+  pf->commands[5] = &privmsg_command;
+  pf->commands[6] = &join_command;
+  pf->commands[7] = &part_command;
+  pf->commands[8] = &list_command;
 }
 
 BOOL     call_function(t_pf *pf, char **command,
