@@ -23,3 +23,17 @@ void need_connection(t_windows *w, t_client *c)
   c->time);
   wrefresh(w->body);
 }
+
+void cant_connect(t_windows *w, t_client *c)
+{
+  wprintw(w->body, "%s - ZAPOIRC: Can't connect to the server\n",
+  c->time);
+  wrefresh(w->body);
+}
+
+void cant_resolve(t_windows *w, t_client *c)
+{
+  wprintw(w->body, "%s - ZAPOIRC: Can't resolve hostname %s\n",
+  c->time, c->ip);
+  wrefresh(w->body);
+}

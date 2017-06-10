@@ -34,7 +34,8 @@ SRC	= main.c \
 			irc_utils.c \
 			errors.c \
 			refresh.c \
-			irc_tools.c
+			irc_tools.c \
+			init_connection.c
 
 OBJS = $(SRC:.c=.o)
 

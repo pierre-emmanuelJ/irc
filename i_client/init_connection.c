@@ -10,7 +10,7 @@
 
 #include "client.h"
 
-int       handle_client(t_client *c)
+int       handle_client(t_client *c, t_windows *w)
 {
   int     fd;
   int     is_on;
@@ -26,19 +26,19 @@ int       handle_client(t_client *c)
   if (is_on == -1)
     return (is_on);
   s_in.sin_family = AF_INET;
-  inet_pton(AF_INET, c->stock.ip, &(s_in.sin_addr));
-  s_in.sin_port = htons(c->stock.port);
+  inet_pton(AF_INET, c->ip, &(s_in.sin_addr));
+  s_in.sin_port = htons(c->port);
   if (connect(fd, (struct sockaddr *)&s_in,
   sizeof(s_in)) == -1)
     return (-1);
-  c->stock.socket = fd;
+  c->socket = fd;
   return (0);
 }
 
 void      close_channel(t_client *c, int nb_socket)
 {
-  close(c->stock.socket);
+  close(c->socket);
   if (nb_socket > 0)
     close(nb_socket);
-  c->stock.port = -1;
+  c->port = -1;
 }
