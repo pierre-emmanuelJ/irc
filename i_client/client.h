@@ -19,13 +19,18 @@
 # include <stdlib.h>
 # include <ctype.h>
 # include <string.h>
-
-# define _GNU_SOURCE
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <sys/socket.h>
+# include <netdb.h>
 
 # define DEFAULT_NICKNAME "francis_kuntz"
 # define DEFAULT_HEADER "Welcome on ZAPOIIIIRC v0.8 RC2 - http://fifigrot.com/"
 # define BOOL _Bool
 # define STATUS t_status
+# define IP_SIZE 56
+# define LATENCY 300
+# define HOST_NAME_MAX 64
 
 typedef enum  s_status
 {
@@ -40,6 +45,13 @@ typedef struct  s_windows {
   WINDOW        *textbox;
 }               t_windows;
 
+typedef struct  s_stock
+{
+  int           socket;
+  int           port;
+  char          ip[IP_SIZE];
+}               t_stock;
+
 typedef struct  s_client {
   char          *time;
   char          *nickname;
@@ -49,6 +61,9 @@ typedef struct  s_client {
   char          *ch;
   STATUS        st;
   char          *params;
+  int           socket;
+  fd_set        fset;
+  t_stock       stock;
 }               t_client;
 
 typedef void  (*funcptr)(char *params, t_windows *w, t_client *c);
