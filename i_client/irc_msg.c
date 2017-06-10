@@ -13,4 +13,6 @@
 void command_msg(char *str, t_windows *w, t_client *c)
 {
   (void)str;
+  (void)w;
+  (void)c;
 }

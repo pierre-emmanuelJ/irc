@@ -77,7 +77,7 @@ void                command_server(char *str, t_windows *w, t_client *c)
   split_args(c, w);
   wprintw(w->body, "%s - Looking up %s on %d\n", c->time, c->ip, c->port);
   wrefresh(w->body);
-  if (handle_client(c, w) != 0)
+  if (handle_client(c) != 0)
   {
     wprintw(w->body, "%s - Unable to connect on %s\n", c->time, c->ip);
     c->ip = "none\0";
