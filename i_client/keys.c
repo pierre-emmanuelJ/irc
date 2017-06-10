@@ -17,14 +17,15 @@ void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
   (void)keybindings;
   if (ch == 127 || ch == 8)
   {
-    c->textbox[strlen(c->textbox)-1] = 0;
+    if (strlen(c->textbox) >= 1)
+      c->textbox[strlen(c->textbox)-1] = 0;
     mvwdelch(w->textbox, getcury(w->textbox), getcurx(w->textbox)-1);
   }
   else if (ch == 10)
   {
     wprintw(w->body, "%s - %s\n", c->time, c->textbox);
     wrefresh(w->body);
-    if (c->textbox[0] == '/')
+    if (c->textbox[0] == '/' && strlen(c->textbox) >= 1)
     {
       current = cmd;
       while (current != NULL)
