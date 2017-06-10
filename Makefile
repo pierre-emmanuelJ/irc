@@ -5,7 +5,7 @@
 ## Login   <pichar_v@epitech.eu>
 ##
 ## Started on  Wed Jan  4 09:07:13 2017 Valentin Pichard
-## Last update Wed Jan  4 23:15:35 2017 Valentin Pichard
+## Last update Sun Jun 11 01:37:53 2017 Pierre-Emmanuel Jacquier
 ##
 
 all:
@@ -21,5 +21,9 @@ fclean:
 	make fclean -C i_server
 
 re: clean fclean all
+
+vgtest: re
+	@valgrind  --leak-check=full --show-leak-kinds=all ./server 1234
+
 
 .PHONY: all clean fclean re

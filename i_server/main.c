@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 20:39:13 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 00:14:56 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -162,6 +162,7 @@ static BOOL         init_data_server(t_server_infos *server_infos)
 
   memset(chanels, 0, sizeof(t_chanel) * MAX_CLI);
   server_infos->chanels = chanels;
+  server_infos->all_cli = clients;
   cbuf = create_circular_buf();
   init_circular_buf(cbuf);
   server_infos->cbuf = cbuf;

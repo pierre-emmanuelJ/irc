@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 20:20:39 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 00:14:01 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -94,6 +94,7 @@ typedef struct          s_server_infos
   struct pollfd         *clients;
   void                  *pfuncs;
   t_chanel              *chanels;
+  t_client_infos        *all_cli;
   t_circular_buf        *cbuf;
   char                  *input;
 }                       t_server_infos;
