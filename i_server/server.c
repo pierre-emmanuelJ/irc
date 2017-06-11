@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu May 11 15:55:39 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 16:37:18 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:56:50 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -43,13 +43,33 @@ BOOL    server_listen(t_server_infos *server_infos)
   return (TRUE);
 }
 
+static void             add_new_client(t_server_infos *server_infos,
+                                       t_client_infos *clients,
+                                       t_client_infos *cli)
+{
+  int                   poll_pos;
+
+  poll_pos = 0;
+  while (poll_pos < MAX_CLI
+         && !(server_infos->clients[poll_pos].fd == 0)
+         && !(server_infos->clients[poll_pos].fd == -1))
+    poll_pos++;
+  if (poll_pos < MAX_CLI)
+  {
+    server_infos->clients[poll_pos].fd = cli->client_fd;
+    server_infos->clients[poll_pos].events = POLLIN;
+    memcpy(&clients[poll_pos], cli, sizeof(t_client_infos));
+    clients[poll_pos].pollfd = &server_infos->clients[poll_pos];
+    clients[poll_pos].chanels = vmalloc(sizeof(t_chanel *) * MAX_CLI);
+    memset(clients[poll_pos].chanels, 0, sizeof(t_chanel *) * MAX_CLI);
+  }
+}
+
 BOOL                    server_accept(t_server_infos *server_infos,
                                       t_client_infos *clients)
 {
-  int                   poll_pos;
   t_client_infos        cli;
 
-  poll_pos = 0;
   memset(&cli, 0, sizeof(t_client_infos));
   cli.s_in_size = sizeof(cli.s_in_client);
   cli.client_fd = accept(server_infos->fd,
@@ -64,18 +84,6 @@ BOOL                    server_accept(t_server_infos *server_infos,
   cli.client_ip = inet_ntoa(cli.s_in_client.sin_addr);
   cli.client_port = ntohs(cli.s_in_client.sin_port);
   printf("New connection from %s:%d\n", cli.client_ip, cli.client_port);
-  while (poll_pos < MAX_CLI
-         && !(server_infos->clients[poll_pos].fd == 0)
-         && !(server_infos->clients[poll_pos].fd == -1))
-    poll_pos++;
-  if (poll_pos < MAX_CLI)
-  {
-    server_infos->clients[poll_pos].fd = cli.client_fd;
-    server_infos->clients[poll_pos].events = POLLIN;
-    memcpy(&clients[poll_pos], &cli, sizeof(cli));
-    clients[poll_pos].pollfd = &server_infos->clients[poll_pos];
-    clients[poll_pos].chanels = vmalloc(sizeof(t_chanel *) * MAX_CLI);
-    memset(clients[poll_pos].chanels, 0, sizeof(t_chanel *) * MAX_CLI);
-  }
+  add_new_client(server_infos, clients, &cli);
   return (TRUE);
 }
