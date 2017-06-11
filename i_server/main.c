@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 18:59:53 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 19:38:15 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -38,12 +38,37 @@ void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
   free(cli[index].nickname);
 }
 
+char       *get_full_msg(char *priv_msg)
+{
+  char     *tmp;
+  char     *msg;
+
+  tmp = priv_msg;
+  tmp = strchr(tmp, ' ');
+  while (*tmp && *tmp == ' ')
+    tmp++;
+  tmp = strchr(tmp, ' ');
+  while (*tmp && *tmp == ' ')
+    tmp++;
+  xasprintf(&msg, "%s", tmp);
+  free(priv_msg);
+  return (msg);
+}
+
 BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result)
 {
   char     **argv;
+  char     *priv_msg;
 
   (void)result;
+  if (!strncmp(command, "PRIVMSG", 7))
+    xasprintf(&priv_msg, "%s", command);
   argv = split_str(command, ' ');
+  if (!strncmp(command, "PRIVMSG", 7))
+    {
+      if (tab_len(argv) >= 3)
+        argv[2] = get_full_msg(priv_msg);
+    }
   call_function((t_pf *)serv->pfuncs, argv, serv, cli);
   free(argv);
   return (TRUE);
@@ -55,10 +80,7 @@ void        exec_lines(t_server_infos *serv,
 {
   char      **lines;
   char      **tmp;
-  // char      *priv_msg;
-  //
-  // if (!strncmp(serv->input, "PRIVMSG", 7))
-  //   xasprintf();
+
   lines = split_str(serv->input, '\n');
   tmp = lines;
   while (*lines)

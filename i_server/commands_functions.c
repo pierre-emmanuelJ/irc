@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 18:59:54 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 19:35:32 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -175,7 +175,7 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
   printf("PRIVMSG\n");
   i = 0;
   (void)serv;
-  if (tab_len(command) != 3)
+  if (tab_len(command) < 3)
   {
     send_str_to_client(cli->client_fd, "461 :Not enough parameters.");
     send_str_to_client(cli->client_fd, "304 :SYNTAX PRIVMSG <target>");
@@ -191,6 +191,7 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
     if (!strcmp(cli->chanels[i]->chanel_name, command[1]))
     {
       xasprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, cli->chanels[i]->chanel_name, command[2]);
+      printf("message to send ###### %s\n", command[2]);
       send_msg_to_chanel(cli->chanels[i], msg, cli);
       free(msg);
     }
