@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 13:32:12 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 13:47:38 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -220,8 +220,10 @@ BOOL          join_command(char **command, t_server_infos *serv, t_client_infos 
   return (TRUE);
 }
 
-BOOL     part_command(char **command, t_server_infos *serv, t_client_infos *cli)
+BOOL          part_command(char **command, t_server_infos *serv, t_client_infos *cli)
 {
+  char        *msg;
+  t_chanel    *chan;
   printf("PART\n");
   if (tab_len(command) != 2)
   {
@@ -229,7 +231,13 @@ BOOL     part_command(char **command, t_server_infos *serv, t_client_infos *cli)
     send_str_to_client(cli->client_fd, "304 :SYNTAX PART <channel>");
     return (FALSE);
   }
-  remove_cli_from_chanel(command[1], serv, cli);
+  if ((chan = chanel_exist(command[1], serv)))
+  {
+    asprintf(&msg, ":%s PART %s", cli->nickname, command[1]);
+    send_msg_to_chanel(chan, msg, cli);
+    send_str_to_client(cli->client_fd, msg);
+    remove_cli_from_chanel(command[1], serv, cli);
+  }
   return (TRUE);
 }
 
