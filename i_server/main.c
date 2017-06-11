@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 16:07:55 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 16:37:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -122,8 +122,10 @@ BOOL           send_str_to_client(int client_fd, const char *msg)
 {
   int          err;
   socklen_t    t;
+  struct sockaddr_in s;
 
-  if (getsockopt(client_fd, SOL_SOCKET, SO_KEEPALIVE, &err, &t) == -1)
+  t = sizeof(s);
+  if (getsockopt(client_fd, SOL_SOCKET, SO_ERROR, &err, &t) == -1)
     return (FALSE);
   if (err)
     return (FALSE);
