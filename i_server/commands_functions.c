@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 13:32:12 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 16:43:46 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -24,6 +24,9 @@ int     tab_len(char **tab)
 BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
 {
   char   *msg;
+  int    i;
+
+  i = 0;
   printf("NICK\n");
   (void)serv;
   if (tab_len(command) < 2)
@@ -36,6 +39,11 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
     {
       printf("%s\n", "second");
       asprintf(&msg, ":%s NICK %s", cli->nickname,  command[1]);
+      while (i < MAX_CLI && cli->chanels[i])
+      {
+        send_msg_to_chanel(cli->chanels[i], msg, cli);
+        i++;
+      }
       send_str_to_client(cli->client_fd, msg);
       free(msg);
       free(cli->nickname);
@@ -119,7 +127,10 @@ void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
   while (i < MAX_CLI && chan->fds_in_chanel[i])
   {
     if (chan->fds_in_chanel[i] > 0 && cli->client_fd != chan->fds_in_chanel[i])
+    {
+      printf("..............%s\n", msg);
       send_str_to_client(chan->fds_in_chanel[i], msg);
+    }
     i++;
   }
 }
@@ -220,8 +231,10 @@ BOOL          join_command(char **command, t_server_infos *serv, t_client_infos 
   return (TRUE);
 }
 
-BOOL     part_command(char **command, t_server_infos *serv, t_client_infos *cli)
+BOOL          part_command(char **command, t_server_infos *serv, t_client_infos *cli)
 {
+  char        *msg;
+  t_chanel    *chan;
   printf("PART\n");
   if (tab_len(command) != 2)
   {
@@ -229,7 +242,14 @@ BOOL     part_command(char **command, t_server_infos *serv, t_client_infos *cli)
     send_str_to_client(cli->client_fd, "304 :SYNTAX PART <channel>");
     return (FALSE);
   }
-  remove_cli_from_chanel(command[1], serv, cli);
+  if ((chan = chanel_exist(command[1], serv)))
+  {
+    asprintf(&msg, ":%s PART %s", cli->nickname, command[1]);
+    send_msg_to_chanel(chan, msg, cli);
+    send_str_to_client(cli->client_fd, msg);
+    printf("..............%s\n", msg);
+    remove_cli_from_chanel(command[1], serv, cli);
+  }
   return (TRUE);
 }
 

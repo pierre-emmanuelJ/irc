@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun May 21 17:51:36 2017 Pierre-Emmanuel Jacquier
-** Last update Fri Jun  9 15:59:53 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 17:42:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -74,7 +74,7 @@ char    **split_str(char *str, int delim)
   i = 1;
   word = count_ocurence(str, delim) + 1;
   if (!(str_array = malloc(sizeof(char *) * (word + 1))))
-    exit(EXIT_FAILURE);
+    exit(FAILURE);
   str_array[0] = str;
   while (i < word)
   {

@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 13:25:30 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 14:54:01 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -159,5 +159,6 @@ void    remove_cli_from_chanel(const char *chanel_name,
                                t_server_infos *serv,
                                t_client_infos *cli);
 void    remove_cli_from_his_chanels(t_client_infos *cli);
+void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli);
 
 #endif /* !MYIRC_H_ */
