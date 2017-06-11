@@ -5,13 +5,25 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 17:42:43 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:59:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 #include "pfunctions_commands.h"
 
 t_end_prg g_end_prg;
+
+int          xasprintf(char **strp, const char *fmt, ...)
+{
+  int        len;
+  va_list    ap;
+
+  va_start(ap, fmt);
+  if ((len = vasprintf(strp, fmt, ap)) == -1)
+    exit(FAILURE);
+  va_end(ap);
+  return (len);
+}
 
 void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
 {
@@ -43,7 +55,10 @@ void        exec_lines(t_server_infos *serv,
 {
   char      **lines;
   char      **tmp;
-
+  // char      *priv_msg;
+  //
+  // if (!strncmp(serv->input, "PRIVMSG", 7))
+  //   xasprintf();
   lines = split_str(serv->input, '\n');
   tmp = lines;
   while (*lines)
@@ -118,11 +133,11 @@ BOOL             request_to_write(t_server_infos *serv)
   return (TRUE);
 }
 
-BOOL           send_str_to_client(int client_fd, const char *msg)
+BOOL                    send_str_to_client(int client_fd, const char *msg)
 {
-  int          err;
-  socklen_t    t;
-  struct sockaddr_in s;
+  int                   err;
+  socklen_t             t;
+  struct sockaddr_in    s;
 
   t = sizeof(s);
   if (getsockopt(client_fd, SOL_SOCKET, SO_ERROR, &err, &t) == -1)

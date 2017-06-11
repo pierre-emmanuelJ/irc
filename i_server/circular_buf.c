@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 18:12:34 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 17:41:07 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:59:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   tmp = *cbuf;
   if (!tmp->end)
   {
-    asprintf(&tmp->rfc_msg, "%s", result);
+    xasprintf(&tmp->rfc_msg, "%s", result);
     tmp->client_fd = cli->client_fd;
     tmp->is_empty = FALSE;
     tmp->pollfd = pollfd;
@@ -35,7 +35,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     (*cbuf)->end = tmp->end;
     tmp = tmp->end;
     tmp->start = *cbuf;
-    asprintf(&tmp->rfc_msg, "%s", result);
+    xasprintf(&tmp->rfc_msg, "%s", result);
     tmp->pollfd = pollfd;
     tmp->client = cli;
     tmp->client_fd = cli->client_fd;
@@ -43,7 +43,7 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
     return (TRUE);
   }
   tmp = tmp->end;
-  asprintf(&tmp->rfc_msg, "%s", result);
+  xasprintf(&tmp->rfc_msg, "%s", result);
   tmp->client_fd = cli->client_fd;
   tmp->is_empty = FALSE;
   tmp->pollfd = pollfd;
