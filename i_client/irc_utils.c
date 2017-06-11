@@ -10,7 +10,7 @@
 
 #include "client.h"
 
-void    command_help(char *str, t_windows *w, t_client *c)
+void          command_help(char *str, t_windows *w, t_client *c)
 {
   if (compare_strict_command(str, "/help", w, c) == FALSE)
     return ;
@@ -20,9 +20,9 @@ void    command_help(char *str, t_windows *w, t_client *c)
   wrefresh(w->body);
 }
 
-void    command_quit(char *str, t_windows *w, t_client *c)
+void          command_quit(char *str, t_windows *w, t_client *c)
 {
-  int   timer;
+  int         timer;
 
   timer = 3;
   if (compare_strict_command(str, "/quit", w, c) == FALSE)

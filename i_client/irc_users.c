@@ -12,7 +12,15 @@
 
 void command_users(char *str, t_windows *w, t_client *c)
 {
-  (void)str;
-  (void)w;
-  (void)c;
+  if (strlen(c->params) >= 1)
+    c->params[0] = 0;
+  if (compare_strict_command(str, "/users" , w, c) == FALSE)
+    return ;
+  if (c->st == CONNECTED)
+  {
+    asprintf(&c->tosend, "USERS\r\n");
+    write(c->socket, c->tosend, strlen(c->tosend));
+  }
+  else
+    need_connection(w, c);
 }

@@ -32,8 +32,8 @@ void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
     key_delete(w, c);
   else if (ch == 10)
   {
-    wprintw(w->body, "%s - %s\n", c->time, c->textbox);
-    wrefresh(w->body);
+    /*wprintw(w->body, "%s - %s\n", c->time, c->textbox);
+    wrefresh(w->body);*/
     if (c->textbox[0] == '/' && strlen(c->textbox) >= 1)
     {
       current = cmd;

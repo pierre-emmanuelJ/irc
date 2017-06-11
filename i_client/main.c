@@ -10,27 +10,36 @@
 
 #include "client.h"
 
-static void reply_ping(t_client *c, t_windows *w)
+static void   init_main(t_windows *w, t_client *c)
 {
-  char *str;
+  init_values(c);
+  assign_windows(w, c);
+  init_body(w, c);
+  wtimeout(w->textbox, 10);
+}
+
+static void   reply_ping(t_client *c, t_windows *w)
+{
+  char        *str;
 
   if (strstr(c->receive, "PING :"))
   {
-    exit(0);
     str = c->receive;
     str += 6;
     asprintf(&c->tosend, "PONG %s\r\n", str);
     write(c->socket, c->tosend, strlen(c->tosend));
   }
   else
+  {
     wprintw(w->body, "%s - %s\n", c->time, c->receive);
     wrefresh(w->body);
+  }
 }
 
-static int custom_read(t_client *c, t_windows *w)
+static int    custom_read(t_client *c)
 {
-    int   ret;
-  int   counter;
+  int         ret;
+  int         counter;
 
   counter = 0;
   bzero(c->receive, 256);
@@ -59,10 +68,7 @@ static void   main_process(t_windows *w, t_client *c)
   w = malloc(sizeof(t_windows));
   c = malloc(sizeof(t_client));
   cmd = lets_init_linkedlist();
-  init_values(c);
-  assign_windows(w, c);
-  init_body(w, c);
-  wtimeout(w->textbox, 10);
+  init_main(w, c);
   while (42)
   {
     time_writter(c);
@@ -75,7 +81,7 @@ static void   main_process(t_windows *w, t_client *c)
       c->tm.tv_usec = 100;
       if ((c->ret = select(c->socket + 1, &(c->fset), NULL, NULL, &(c->tm))) == -1)
         return ;
-      if (custom_read(c, w) > -1 && strlen(c->receive) >= 1)
+      if (custom_read(c) > -1 && strlen(c->receive) >= 1)
         reply_ping(c, w);
     }
   }
@@ -83,10 +89,10 @@ static void   main_process(t_windows *w, t_client *c)
   free(w);
 }
 
-int main(void)
+int           main(void)
 {
-  t_windows w;
-  t_client c;
+  t_windows   w;
+  t_client    c;
 
   init_ncurses();
   main_process(&w, &c);
