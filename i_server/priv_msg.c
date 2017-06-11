@@ -10,9 +10,9 @@
 
 #include "server.h"
 
-void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
+void    send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
 {
-  int    i;
+  int   i;
 
   i = 0;
   while (i < MAX_CLI && chan->fds_in_chanel[i])
@@ -26,9 +26,9 @@ void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
   }
 }
 
-int      find_user_by_nick(char *nick, t_server_infos *serv)
+int     find_user_by_nick(char *nick, t_server_infos *serv)
 {
-  int    i;
+  int   i;
 
   i = 0;
   while (i < MAX_CLI && serv->all_cli[i].client_fd != 0)
@@ -43,12 +43,12 @@ int      find_user_by_nick(char *nick, t_server_infos *serv)
   return (-1);
 }
 
-void      send_msg_to_priv_cli(char **command,
-                               t_server_infos *serv,
-                               t_client_infos *cli)
+void    send_msg_to_priv_cli(char **command,
+                             t_server_infos *serv,
+                             t_client_infos *cli)
 {
-  char    *msg;
-  int     fd;
+  char  *msg;
+  int   fd;
 
   if ((fd = find_user_by_nick(command[1], serv)) == -1)
   {
@@ -65,8 +65,8 @@ void      send_msg_to_priv_cli(char **command,
 void    send_msg_to_all_chan(char **command,
                              t_client_infos *cli)
 {
-  int    i;
-  char   *msg;
+  int   i;
+  char  *msg;
 
   i = 0;
   while (i < MAX_CLI && cli->chanels[i])
@@ -82,9 +82,9 @@ void    send_msg_to_all_chan(char **command,
   }
 }
 
-BOOL     privmsg_command(char **command,
-                         t_server_infos *serv,
-                         t_client_infos *cli)
+BOOL    privmsg_command(char **command,
+                        t_server_infos *serv,
+                        t_client_infos *cli)
 {
   if (tab_len(command) < 3)
   {

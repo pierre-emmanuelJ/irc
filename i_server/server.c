@@ -10,7 +10,7 @@
 
 #include "server.h"
 
-BOOL     create_socket(t_server_infos *server_infos)
+BOOL    create_socket(t_server_infos *server_infos)
 {
   server_infos->pe = getprotobyname("TCP");
   if (!server_infos->pe)
@@ -32,7 +32,7 @@ BOOL     create_socket(t_server_infos *server_infos)
   return (TRUE);
 }
 
-BOOL     server_listen(t_server_infos *server_infos)
+BOOL    server_listen(t_server_infos *server_infos)
 {
   if (listen(server_infos->fd, MAX_CLI))
   {
@@ -43,10 +43,11 @@ BOOL     server_listen(t_server_infos *server_infos)
   return (TRUE);
 }
 
-BOOL     server_accept(t_server_infos *server_infos, t_client_infos *clients)
+BOOL                    server_accept(t_server_infos *server_infos,
+                                      t_client_infos *clients)
 {
-  int    poll_pos;
-  t_client_infos cli;
+  int                   poll_pos;
+  t_client_infos        cli;
 
   poll_pos = 0;
   memset(&cli, 0, sizeof(t_client_infos));

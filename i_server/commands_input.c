@@ -11,9 +11,9 @@
 #include "server.h"
 #include "pfunctions_commands.h"
 
-static void    remove_client(struct pollfd *fds,
-                             t_client_infos *cli,
-                             int index)
+static void     remove_client(struct pollfd *fds,
+                              t_client_infos *cli,
+                              int index)
 {
   remove_cli_from_his_chanels(&cli[index]);
   close(fds[index].fd);
@@ -25,10 +25,10 @@ static void    remove_client(struct pollfd *fds,
   free(cli[index].nickname);
 }
 
-static char       *get_full_msg(char *priv_msg)
+static char     *get_full_msg(char *priv_msg)
 {
-  char     *tmp;
-  char     *msg;
+  char          *tmp;
+  char          *msg;
 
   tmp = priv_msg;
   tmp = strchr(tmp, ' ');
@@ -42,13 +42,13 @@ static char       *get_full_msg(char *priv_msg)
   return (msg);
 }
 
-BOOL      exec_command(char *command,
-                       t_server_infos *serv,
-                       t_client_infos *cli,
-                       char **result)
+BOOL    exec_command(char *command,
+                     t_server_infos *serv,
+                     t_client_infos *cli,
+                     char **result)
 {
-  char    **argv;
-  char    *priv_msg;
+  char  **argv;
+  char  *priv_msg;
 
   (void)result;
   if (!strncmp(command, "PRIVMSG", 7))
@@ -64,12 +64,12 @@ BOOL      exec_command(char *command,
   return (TRUE);
 }
 
-static void        exec_lines(t_server_infos *serv,
-                       struct pollfd  *pollfd,
-                       t_client_infos *cli)
+static void     exec_lines(t_server_infos *serv,
+                           struct pollfd  *pollfd,
+                           t_client_infos *cli)
 {
-  char      **lines;
-  char      **tmp;
+  char          **lines;
+  char          **tmp;
 
   lines = split_str(serv->input, '\n');
   tmp = lines;
@@ -85,12 +85,12 @@ static void        exec_lines(t_server_infos *serv,
   free(tmp);
 }
 
-void        data_client_receive(t_server_infos *serv,
-                                t_client_infos *cli)
+void    data_client_receive(t_server_infos *serv,
+                            t_client_infos *cli)
 {
-  int       i;
-  char      input[1024];
-  int       len;
+  int   i;
+  char  input[1024];
+  int   len;
 
   i = 1;
   while (i < MAX_CLI && serv->clients[i].fd != 0)
@@ -100,7 +100,7 @@ void        data_client_receive(t_server_infos *serv,
         if (!(len = read(serv->clients[i].fd, input, 1024)))
         {
           remove_client(serv->clients, cli, i++);
-          continue;
+          continue ;
         }
         input[len] = 0;
         remove_crlf(input);

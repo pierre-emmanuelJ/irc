@@ -10,9 +10,9 @@
 
 #include "server.h"
 
-void             *vmalloc(size_t size)
+void    *vmalloc(size_t size)
 {
-  void           *mem;
+  void  *mem;
 
   mem = malloc(size);
   if (!mem)
@@ -23,7 +23,7 @@ void             *vmalloc(size_t size)
   return (mem);
 }
 
-BOOL      is_number(char *number)
+BOOL    is_number(char *number)
 {
   while (*number)
   {

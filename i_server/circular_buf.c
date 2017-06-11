@@ -10,12 +10,12 @@
 
 #include "server.h"
 
-void    first_node(t_circular_buf **cbuf,
-                   struct pollfd *pollfd,
-                   t_client_infos *cli,
-                   char *result)
+void                    first_node(t_circular_buf **cbuf,
+                                   struct pollfd *pollfd,
+                                   t_client_infos *cli,
+                                   char *result)
 {
-  t_circular_buf    *tmp;
+  t_circular_buf        *tmp;
 
   tmp = *cbuf;
   xasprintf(&tmp->rfc_msg, "%s", result);
@@ -27,12 +27,12 @@ void    first_node(t_circular_buf **cbuf,
   tmp->end->start = tmp;
 }
 
-void    erase_first_node(t_circular_buf **cbuf,
-                         struct pollfd *pollfd,
-                         t_client_infos *cli,
-                         char *result)
+void                    erase_first_node(t_circular_buf **cbuf,
+                                         struct pollfd *pollfd,
+                                         t_client_infos *cli,
+                                         char *result)
 {
-  t_circular_buf    *tmp;
+  t_circular_buf        *tmp;
 
   tmp = *cbuf;
   *cbuf = (*cbuf)->next;
@@ -46,12 +46,12 @@ void    erase_first_node(t_circular_buf **cbuf,
   tmp->is_empty = FALSE;
 }
 
-void    add_node(t_circular_buf **cbuf,
-                 struct pollfd *pollfd,
-                 t_client_infos *cli,
-                 char *result)
+void                    add_node(t_circular_buf **cbuf,
+                                 struct pollfd *pollfd,
+                                 t_client_infos *cli,
+                                 char *result)
 {
-  t_circular_buf    *tmp;
+  t_circular_buf        *tmp;
 
   tmp = *cbuf;
   tmp = tmp->end;
@@ -64,12 +64,12 @@ void    add_node(t_circular_buf **cbuf,
   (*cbuf)->end = tmp->next;
 }
 
-BOOL                add_in_cbuf(t_circular_buf **cbuf,
-                                struct pollfd *pollfd,
-                                t_client_infos *cli,
-                                char *result)
+BOOL                    add_in_cbuf(t_circular_buf **cbuf,
+                                    struct pollfd *pollfd,
+                                    t_client_infos *cli,
+                                    char *result)
 {
-  t_circular_buf    *tmp;
+  t_circular_buf        *tmp;
 
   tmp = *cbuf;
   if (!tmp->end)
@@ -86,10 +86,10 @@ BOOL                add_in_cbuf(t_circular_buf **cbuf,
   return (TRUE);
 }
 
-BOOL             use_cbuf(t_circular_buf **cbuf,
-                          t_server_infos *serv)
+BOOL    use_cbuf(t_circular_buf **cbuf,
+                 t_server_infos *serv)
 {
-  char           *result;
+  char  *result;
 
   while (!(*cbuf)->is_empty)
   {

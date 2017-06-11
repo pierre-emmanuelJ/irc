@@ -10,12 +10,12 @@
 
 #include "server.h"
 
-BOOL          join_command(char **command,
-                           t_server_infos *serv,
-                           t_client_infos *cli)
+BOOL            join_command(char **command,
+                             t_server_infos *serv,
+                             t_client_infos *cli)
 {
-  char        *msg;
-  t_chanel    *chan;
+  char          *msg;
+  t_chanel      *chan;
 
   if (tab_len(command) < 2)
   {
@@ -37,12 +37,12 @@ BOOL          join_command(char **command,
   return (TRUE);
 }
 
-BOOL          part_command(char **command,
-                           t_server_infos *serv,
-                           t_client_infos *cli)
+BOOL            part_command(char **command,
+                             t_server_infos *serv,
+                             t_client_infos *cli)
 {
-  char        *msg;
-  t_chanel    *chan;
+  char          *msg;
+  t_chanel      *chan;
 
   if (tab_len(command) != 2)
   {

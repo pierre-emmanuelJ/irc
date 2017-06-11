@@ -11,12 +11,12 @@
 #include "server.h"
 #include "pfunctions_commands.h"
 
-t_end_prg g_end_prg;
+t_end_prg       g_end_prg;
 
-static BOOL      server_main_loop(t_server_infos *server_infos,
+static BOOL     server_main_loop(t_server_infos *server_infos,
                                   t_client_infos *clients)
 {
-  int            event;
+  int           event;
 
   while (1)
   {
@@ -42,11 +42,11 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
   return (TRUE);
 }
 
-static BOOL         init_data_server(t_server_infos *server_infos)
+static BOOL             init_data_server(t_server_infos *server_infos)
 {
-  t_circular_buf    *cbuf;
-  t_client_infos    clients[MAX_CLI];
-  t_chanel          chanels[MAX_CLI];
+  t_circular_buf        *cbuf;
+  t_client_infos        clients[MAX_CLI];
+  t_chanel              chanels[MAX_CLI];
 
   memset(chanels, 0, sizeof(t_chanel) * MAX_CLI);
   server_infos->chanels = chanels;
@@ -66,7 +66,7 @@ static BOOL         init_data_server(t_server_infos *server_infos)
   return (TRUE);
 }
 
-static BOOL      commons(t_server_infos *server_infos)
+static BOOL     commons(t_server_infos *server_infos)
 {
   if (!create_socket(server_infos))
     return (FALSE);
@@ -77,7 +77,7 @@ static BOOL      commons(t_server_infos *server_infos)
   return (TRUE);
 }
 
-static void    ctrl_c()
+static void     ctrl_c()
 {
   int i;
 

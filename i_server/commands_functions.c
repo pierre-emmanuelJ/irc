@@ -11,12 +11,12 @@
 #include "server.h"
 #include "pfunctions_commands.h"
 
-BOOL     nick_command(char **command,
+BOOL    nick_command(char **command,
                       t_server_infos *serv,
                       t_client_infos *cli)
 {
-  char   *msg;
-  int    i;
+  char  *msg;
+  int   i;
 
   i = 0;
   (void)serv;
@@ -41,9 +41,9 @@ BOOL     nick_command(char **command,
   return (TRUE);
 }
 
-BOOL     user_command(char **command,
-                      t_server_infos *serv,
-                      t_client_infos *cli)
+BOOL    user_command(char **command,
+                     t_server_infos *serv,
+                     t_client_infos *cli)
 {
   (void)serv;
   if (tab_len(command) < 5)
@@ -64,11 +64,11 @@ BOOL     user_command(char **command,
   return (TRUE);
 }
 
-BOOL     ping_command(char **command,
-                      t_server_infos *serv,
-                      t_client_infos *cli)
+BOOL    ping_command(char **command,
+                     t_server_infos *serv,
+                     t_client_infos *cli)
 {
-  char   *str;
+  char  *str;
 
   (void)serv;
   if (tab_len(command) == 1)
@@ -84,9 +84,9 @@ BOOL     ping_command(char **command,
   return (TRUE);
 }
 
-BOOL     pong_command(char **command,
-                      t_server_infos *serv,
-                      t_client_infos *cli)
+BOOL    pong_command(char **command,
+                     t_server_infos *serv,
+                     t_client_infos *cli)
 {
   (void)command;
   (void)serv;
@@ -94,9 +94,9 @@ BOOL     pong_command(char **command,
   return (TRUE);
 }
 
-BOOL     quit_command(char **command,
-                      t_server_infos *serv,
-                      t_client_infos *cli)
+BOOL    quit_command(char **command,
+                     t_server_infos *serv,
+                     t_client_infos *cli)
 {
   (void)command;
   (void)serv;

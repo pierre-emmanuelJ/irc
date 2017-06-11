@@ -10,9 +10,9 @@
 
 #include "server.h"
 
-t_circular_buf *create_circular_buf(void)
+t_circular_buf          *create_circular_buf(void)
 {
-  t_circular_buf *new_buf;
+  t_circular_buf        *new_buf;
 
   new_buf = vmalloc(sizeof(t_circular_buf) * MAX_CLI);
   new_buf->is_empty = TRUE;
@@ -25,10 +25,10 @@ t_circular_buf *create_circular_buf(void)
   return (new_buf);
 }
 
-void             init_circular_buf(t_circular_buf *cbuf)
+void                    init_circular_buf(t_circular_buf *cbuf)
 {
-  int            i;
-  t_circular_buf *tmp;
+  int                   i;
+  t_circular_buf        *tmp;
 
   i = 0;
   tmp = cbuf;

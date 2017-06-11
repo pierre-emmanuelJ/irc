@@ -5,15 +5,15 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun Jun 11 20:48:24 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:50:41 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:29:33 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 
-void    remove_cli_from_his_chanels(t_client_infos *cli)
+void     remove_cli_from_his_chanels(t_client_infos *cli)
 {
-  int   i;
-  int   j;
+  int    i;
+  int    j;
 
   i = 0;
   j = 0;
@@ -33,10 +33,10 @@ void    remove_cli_from_his_chanels(t_client_infos *cli)
   }
 }
 
-t_chanel          *chanel_exist(const char *chanel_name,
-                                t_server_infos *serv)
+t_chanel    *chanel_exist(const char *chanel_name,
+                          t_server_infos *serv)
 {
-  int         i;
+  int       i;
 
   i = 0;
   while (i < MAX_CLI && serv->chanels[i].chanel_name)

@@ -25,7 +25,7 @@ void    init_tpsf_tab(t_pf *pf)
   pf->commands[8] = &list_command;
 }
 
-BOOL     call_function(t_pf *pf, char **command,
+BOOL    call_function(t_pf *pf, char **command,
                       t_server_infos *serv_infos,
                       t_client_infos *cli_infos)
 {

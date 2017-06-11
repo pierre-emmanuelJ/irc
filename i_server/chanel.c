@@ -5,17 +5,17 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu Jun  8 14:33:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:50:35 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:30:54 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 
-void    add_new_chanel(const char *chanel_name,
-                       t_server_infos *serv,
-                       t_client_infos *cli)
+void            add_new_chanel(const char *chanel_name,
+                               t_server_infos *serv,
+                               t_client_infos *cli)
 {
-  int   i;
-  t_chanel    *chan;
+  int           i;
+  t_chanel      *chan;
 
   i = 0;
   while (i < MAX_CLI && serv->chanels[i].chanel_name)
@@ -35,9 +35,9 @@ void    add_new_chanel(const char *chanel_name,
   cli->chanels[i] = chan;
 }
 
-static void   add_chanel_to_cli_list(t_client_infos *cli, t_chanel *chan)
+static void     add_chanel_to_cli_list(t_client_infos *cli, t_chanel *chan)
 {
-  int         i;
+  int           i;
 
   i = 0;
   while (i < MAX_CLI && cli->chanels[i])
@@ -78,7 +78,7 @@ void          add_cli_to_chanel(const char *chanel_name,
 }
 
 void    remove_chanel_from_cli_list(t_chanel *chan,
-                                  t_client_infos *cli)
+                                    t_client_infos *cli)
 {
   int   i;
 
@@ -93,13 +93,13 @@ void    remove_chanel_from_cli_list(t_chanel *chan,
     i++;
 }
 
-void    remove_cli_from_chanel(const char *chanel_name,
-                              t_server_infos *serv,
-                              t_client_infos *cli)
+void            remove_cli_from_chanel(const char *chanel_name,
+                                       t_server_infos *serv,
+                                       t_client_infos *cli)
 {
-  int         i;
-  int         found;
-  t_chanel    *chan;
+  int           i;
+  int           found;
+  t_chanel      *chan;
 
   i = 0;
   while (i < MAX_CLI && serv->chanels[i].chanel_name)

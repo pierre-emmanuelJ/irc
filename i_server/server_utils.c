@@ -20,9 +20,9 @@ int     tab_len(char **tab)
   return (i);
 }
 
-size_t    count_pollfds(struct pollfd *fds)
+size_t          count_pollfds(struct pollfd *fds)
 {
-  size_t i;
+  size_t        i;
 
   i = 0;
   while (i < (size_t)MAX_CLI)
@@ -34,10 +34,10 @@ size_t    count_pollfds(struct pollfd *fds)
   return (i);
 }
 
-int          xasprintf(char **strp, const char *fmt, ...)
+int             xasprintf(char **strp, const char *fmt, ...)
 {
-  int        len;
-  va_list    ap;
+  int           len;
+  va_list       ap;
 
   va_start(ap, fmt);
   if ((len = vasprintf(strp, fmt, ap)) == -1)

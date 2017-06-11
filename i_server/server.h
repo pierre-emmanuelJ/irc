@@ -117,55 +117,55 @@ BOOL     is_number(char *number);
 /*
 ** server utiles
 */
-size_t   count_pollfds(struct pollfd *fds);
-int      tab_len(char **tab);
-int      xasprintf(char **strp, const char *fmt, ...);
-BOOL     create_socket(t_server_infos *);
-BOOL     server_listen(t_server_infos *);
-BOOL     server_accept(t_server_infos *, t_client_infos *);
-void     data_client_receive(t_server_infos *, t_client_infos *);
-BOOL     send_str_to_client(int client_fd, const char *msg);
-BOOL     exec_command(char *command,
-                      t_server_infos *serv,
-                      t_client_infos *cli,
-                      char **result);
+size_t  count_pollfds(struct pollfd *fds);
+int     tab_len(char **tab);
+int     xasprintf(char **strp, const char *fmt, ...);
+BOOL    create_socket(t_server_infos *);
+BOOL    server_listen(t_server_infos *);
+BOOL    server_accept(t_server_infos *, t_client_infos *);
+void    data_client_receive(t_server_infos *, t_client_infos *);
+BOOL    send_str_to_client(int client_fd, const char *msg);
+BOOL    exec_command(char *command,
+                     t_server_infos *serv,
+                     t_client_infos *cli,
+                     char **result);
 /*
 ** circular buffer
 */
-t_circular_buf *create_circular_buf(void);
-void           init_circular_buf(t_circular_buf *);
-BOOL           add_in_cbuf(t_circular_buf **cbuf,
-                           struct pollfd *pollfd,
-                           t_client_infos *cli,
-                           char *result);
-BOOL           use_cbuf(t_circular_buf **cbuf,
-                        t_server_infos *serv);
+t_circular_buf  *create_circular_buf(void);
+void            init_circular_buf(t_circular_buf *);
+BOOL            add_in_cbuf(t_circular_buf **cbuf,
+                            struct pollfd *pollfd,
+                            t_client_infos *cli,
+                            char *result);
+BOOL            use_cbuf(t_circular_buf **cbuf,
+                         t_server_infos *serv);
 
 /*
 ** malloc memory verification
 */
-void           *vmalloc(size_t size);
-void           epure_str(char *str, int str_len);
-char           **split_str(char *str, int delim);
-void           remove_crlf(char *str);
+void    *vmalloc(size_t size);
+void    epure_str(char *str, int str_len);
+char    **split_str(char *str, int delim);
+void    remove_crlf(char *str);
 
 /*
 ** chanels
 */
-void           add_new_chanel(const char *chanel_name,
-                              t_server_infos *serv,
-                              t_client_infos *cli);
-t_chanel       *chanel_exist(const char *chanel_name,
-                            t_server_infos *serv);
-void           add_cli_to_chanel(const char *chanel_name,
-                                 t_server_infos *serv,
-                                 t_client_infos *cli);
-void           remove_cli_from_chanel(const char *chanel_name,
-                                      t_server_infos *serv,
-                                      t_client_infos *cli);
-void           remove_cli_from_his_chanels(t_client_infos *cli);
-void           send_msg_to_chanel(t_chanel *chan,
-                                  char *msg,
+void            add_new_chanel(const char *chanel_name,
+                               t_server_infos *serv,
+                               t_client_infos *cli);
+t_chanel        *chanel_exist(const char *chanel_name,
+                              t_server_infos *serv);
+void            add_cli_to_chanel(const char *chanel_name,
+                                  t_server_infos *serv,
                                   t_client_infos *cli);
+void            remove_cli_from_chanel(const char *chanel_name,
+                                       t_server_infos *serv,
+                                       t_client_infos *cli);
+void            remove_cli_from_his_chanels(t_client_infos *cli);
+void            send_msg_to_chanel(t_chanel *chan,
+                                   char *msg,
+                                   t_client_infos *cli);
 
 #endif /* !MYIRC_H_ */
