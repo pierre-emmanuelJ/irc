@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu Jun  8 14:33:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 14:07:09 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 14:32:28 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -106,6 +106,9 @@ void    remove_chanel_to_cli_list(t_chanel *chan,
   if (i == MAX_CLI -1)
     return ;
   memcpy(cli->chanels + i, cli->chanels + i + 1, MAX_CLI - i);
+  i = 0;
+  while (i < MAX_CLI && cli->chanels[i])
+    i++;
 }
 
 void    remove_cli_from_chanel(const char *chanel_name,
@@ -131,12 +134,13 @@ void    remove_cli_from_chanel(const char *chanel_name,
   {
     if (chan->fds_in_chanel[i] == cli->client_fd)
     {
+      printf("%s\n", "je le remove du fd chanel list");
       chan->fds_in_chanel[i] = -1;
+      remove_chanel_to_cli_list(chan, cli);
       break ;
     }
     i++;
   }
-  remove_chanel_to_cli_list(chan, cli);
 }
 
 void    remove_cli_from_his_chanels(t_client_infos *cli)
