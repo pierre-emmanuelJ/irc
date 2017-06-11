@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 00:14:01 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 13:25:30 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -56,7 +56,7 @@ typedef enum s_bool
 typedef struct          s_chanel
 {
   char                  *chanel_name;
-  struct pollfd         **fds_in_chanel;
+  int                   *fds_in_chanel;
 }                       t_chanel;
 
 typedef struct          s_client_infos
@@ -150,7 +150,7 @@ void           remove_crlf(char *str);
 void           add_new_chanel(const char *chanel_name,
                               t_server_infos *serv,
                               t_client_infos *cli);
-BOOL           chanel_exist(const char *chanel_name,
+t_chanel       *chanel_exist(const char *chanel_name,
                             t_server_infos *serv);
 void           add_cli_to_chanel(const char *chanel_name,
                                  t_server_infos *serv,

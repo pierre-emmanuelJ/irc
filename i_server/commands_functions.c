@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 00:44:51 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 13:32:12 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -32,14 +32,18 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
     send_str_to_client(cli->client_fd, "304 :SYNTAX NICK <newnick>");
     return (FALSE);
   }
-  if (!cli->nickname)
+  if (cli->nickname)
     {
-      asprintf(&msg, ":%s!%s@%s NICK %s", cli->nickname, cli->user, cli->client_ip, command[1]);
+      printf("%s\n", "second");
+      asprintf(&msg, ":%s NICK %s", cli->nickname,  command[1]);
+      send_str_to_client(cli->client_fd, msg);
       free(msg);
+      free(cli->nickname);
+      asprintf(&cli->nickname, "%s", command[1]);
       return (TRUE);
     }
+  printf("%s\n", "first");
   asprintf(&cli->nickname, "%s", command[1]);
-  free(msg);
   return (TRUE);
 }
 
@@ -96,9 +100,9 @@ BOOL     quit_command(char **command, t_server_infos *serv, t_client_infos *cli)
   printf("QUIT\n");
   (void)command;
   (void)serv;
-  (void)cli;
+  printf("%s\n", "je me clean de la chanel");
   remove_cli_from_his_chanels(cli);
-  close(cli->pollfd->fd);
+  close(cli->client_fd);
   cli->pollfd->fd = -1;
   cli->client_fd = -1;
   if (cli->chanels)
@@ -114,8 +118,8 @@ void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
   i = 0;
   while (i < MAX_CLI && chan->fds_in_chanel[i])
   {
-    if (chan->fds_in_chanel[i]->fd > 0 && cli->client_fd != chan->fds_in_chanel[i]->fd)
-      send_str_to_client(chan->fds_in_chanel[i]->fd, msg);
+    if (chan->fds_in_chanel[i] > 0 && cli->client_fd != chan->fds_in_chanel[i])
+      send_str_to_client(chan->fds_in_chanel[i], msg);
     i++;
   }
 }
@@ -147,7 +151,7 @@ void    send_msg_to_priv_cli(char **command, t_server_infos *serv, t_client_info
     asprintf(&msg, "401 %s %s :No such nick/channel", cli->nickname, command[2]);
     return ;
   }
-  asprintf(&msg, ":%s!%s@%s PRIVMSG %s :%s", cli->nickname, cli->user, cli->client_ip, command[1], command[2]);
+  asprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, command[1], command[2]);
   send_str_to_client(fd, msg);
   free(msg);
 }
@@ -175,7 +179,7 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
   {
     if (!strcmp(cli->chanels[i]->chanel_name, command[1]))
     {
-      asprintf(&msg, ":%s!%s@%s PRIVMSG %s :%s", cli->nickname, cli->user, cli->client_ip, cli->chanels[i]->chanel_name, command[2]);
+      asprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, cli->chanels[i]->chanel_name, command[2]);
       send_msg_to_chanel(cli->chanels[i], msg, cli);
       free(msg);
     }
@@ -184,9 +188,11 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
   return (TRUE);
 }
 
-BOOL     join_command(char **command, t_server_infos *serv, t_client_infos *cli)
+BOOL          join_command(char **command, t_server_infos *serv, t_client_infos *cli)
 {
-  char   *msg;
+  char        *msg;
+  t_chanel    *chan;
+
   printf("join\n");
   if (tab_len(command) < 2)
   {
@@ -204,7 +210,12 @@ BOOL     join_command(char **command, t_server_infos *serv, t_client_infos *cli)
     printf("chanel NOT exist\n");
     add_new_chanel(command[1], serv, cli);
   }
-  asprintf(&msg, ":%s!%s@%s JOIN :#%s", cli->nickname, cli->user, cli->client_ip, command[1]);
+  asprintf(&msg, ":%s JOIN %s", cli->nickname, command[1]);
+  if ((chan = chanel_exist(command[1], serv)))
+  {
+    send_msg_to_chanel(chan, msg, cli);
+    send_str_to_client(cli->client_fd, msg);
+  }
   free(msg);
   return (TRUE);
 }
