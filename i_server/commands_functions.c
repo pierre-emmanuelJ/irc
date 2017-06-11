@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 14:55:49 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 16:43:46 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -127,7 +127,10 @@ void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli)
   while (i < MAX_CLI && chan->fds_in_chanel[i])
   {
     if (chan->fds_in_chanel[i] > 0 && cli->client_fd != chan->fds_in_chanel[i])
+    {
+      printf("..............%s\n", msg);
       send_str_to_client(chan->fds_in_chanel[i], msg);
+    }
     i++;
   }
 }
@@ -244,6 +247,7 @@ BOOL          part_command(char **command, t_server_infos *serv, t_client_infos 
     asprintf(&msg, ":%s PART %s", cli->nickname, command[1]);
     send_msg_to_chanel(chan, msg, cli);
     send_str_to_client(cli->client_fd, msg);
+    printf("..............%s\n", msg);
     remove_cli_from_chanel(command[1], serv, cli);
   }
   return (TRUE);

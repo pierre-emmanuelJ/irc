@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 16:37:53 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 17:42:43 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -211,7 +211,7 @@ static void    ctrl_c()
   }
   free(g_end_prg.pollfds);
   free(g_end_prg.cbuf);
-  exit(EXIT_SUCCESS);
+  exit(0);
 }
 
 int                     main(int argc, char **argv)
@@ -222,7 +222,7 @@ int                     main(int argc, char **argv)
   if (argc != 2 || !is_number(argv[1]))
   {
     fprintf(stderr, "USAGE: ./server port\n");
-    return (FAILURE);
+    exit(FAILURE);
   }
   signal(SIGINT, ctrl_c);
   init_tpsf_tab(&pf);
