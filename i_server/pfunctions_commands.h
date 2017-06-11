@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 18:08:07 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 19:24:41 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:21:44 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef PFONCTION_COMMANDS_H_
@@ -39,6 +39,5 @@ BOOL     privmsg_command(char **command, t_server_infos *, t_client_infos *);
 BOOL     join_command(char **command, t_server_infos *, t_client_infos *);
 BOOL     part_command(char **command, t_server_infos *, t_client_infos *);
 BOOL     list_command(char **command, t_server_infos *, t_client_infos *);
-
 
 #endif /* !PFONCTION_COMMANDS_H_ */

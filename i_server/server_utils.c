@@ -5,10 +5,20 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun Jun 11 20:07:52 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:12:00 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:15:37 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
+
+int     tab_len(char **tab)
+{
+  int   i;
+
+  i = 0;
+  while (tab[i])
+    i++;
+  return (i);
+}
 
 size_t    count_pollfds(struct pollfd *fds)
 {

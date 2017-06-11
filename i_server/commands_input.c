@@ -5,15 +5,16 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun Jun 11 20:09:47 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:13:41 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 20:23:08 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
 #include "pfunctions_commands.h"
 
-static void    remove_client(struct pollfd *fds, t_client_infos *cli, int index)
+static void    remove_client(struct pollfd *fds,
+                             t_client_infos *cli,
+                             int index)
 {
-  printf("client %s:%d leave\n", cli[index].client_ip, cli[index].client_port);
   remove_cli_from_his_chanels(&cli[index]);
   close(fds[index].fd);
   fds[index].fd = -1;
@@ -41,10 +42,13 @@ static char       *get_full_msg(char *priv_msg)
   return (msg);
 }
 
-BOOL        exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result)
+BOOL      exec_command(char *command,
+                       t_server_infos *serv,
+                       t_client_infos *cli,
+                       char **result)
 {
-  char     **argv;
-  char     *priv_msg;
+  char    **argv;
+  char    *priv_msg;
 
   (void)result;
   if (!strncmp(command, "PRIVMSG", 7))
@@ -81,7 +85,7 @@ static void        exec_lines(t_server_infos *serv,
   free(tmp);
 }
 
-BOOL        data_client_receive(t_server_infos *serv,
+void        data_client_receive(t_server_infos *serv,
                                 t_client_infos *cli)
 {
   int       i;
@@ -96,19 +100,17 @@ BOOL        data_client_receive(t_server_infos *serv,
         if (!(len = read(serv->clients[i].fd, input, 1024)))
         {
           remove_client(serv->clients, cli, i++);
-          continue ;
+          continue;
         }
         input[len] = 0;
         remove_crlf(input);
-        if (!strcmp(input, ""))
+        if (!strcmp(input, ""));
+        else
         {
-          i++;
-          continue;
+          serv->input = input;
+          exec_lines(serv, &serv->clients[i], &cli[i]);
         }
-        serv->input = input;
-        exec_lines(serv, &serv->clients[i], &cli[i]);
       }
     i++;
   }
-  return (TRUE);
 }

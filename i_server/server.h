@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:12:11 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:25:13 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -106,7 +106,7 @@ typedef struct          end_prg
   t_circular_buf        *cbuf;
 }                       t_end_prg;
 
-extern t_end_prg g_end_prg;
+extern t_end_prg    g_end_prg;
 
 /*
 ** utils functions
@@ -123,10 +123,12 @@ int      xasprintf(char **strp, const char *fmt, ...);
 BOOL     create_socket(t_server_infos *);
 BOOL     server_listen(t_server_infos *);
 BOOL     server_accept(t_server_infos *, t_client_infos *);
-BOOL     data_client_receive(t_server_infos *, t_client_infos *);
+void     data_client_receive(t_server_infos *, t_client_infos *);
 BOOL     send_str_to_client(int client_fd, const char *msg);
-BOOL     exec_command(char *command, t_server_infos *serv, t_client_infos *cli, char **result);
-
+BOOL     exec_command(char *command,
+                      t_server_infos *serv,
+                      t_client_infos *cli,
+                      char **result);
 /*
 ** circular buffer
 */
@@ -136,9 +138,8 @@ BOOL           add_in_cbuf(t_circular_buf **cbuf,
                            struct pollfd *pollfd,
                            t_client_infos *cli,
                            char *result);
-BOOL             use_cbuf(t_circular_buf **cbuf,
-                          t_server_infos *serv);
-
+BOOL           use_cbuf(t_circular_buf **cbuf,
+                        t_server_infos *serv);
 
 /*
 ** malloc memory verification
@@ -159,10 +160,12 @@ t_chanel       *chanel_exist(const char *chanel_name,
 void           add_cli_to_chanel(const char *chanel_name,
                                  t_server_infos *serv,
                                  t_client_infos *cli);
-void    remove_cli_from_chanel(const char *chanel_name,
-                               t_server_infos *serv,
-                               t_client_infos *cli);
-void    remove_cli_from_his_chanels(t_client_infos *cli);
-void     send_msg_to_chanel(t_chanel *chan, char *msg, t_client_infos *cli);
+void           remove_cli_from_chanel(const char *chanel_name,
+                                      t_server_infos *serv,
+                                      t_client_infos *cli);
+void           remove_cli_from_his_chanels(t_client_infos *cli);
+void           send_msg_to_chanel(t_chanel *chan,
+                                  char *msg,
+                                  t_client_infos *cli);
 
 #endif /* !MYIRC_H_ */

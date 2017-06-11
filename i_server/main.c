@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:13:31 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 21:21:15 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -20,7 +20,8 @@ static BOOL      server_main_loop(t_server_infos *server_infos,
 
   while (1)
   {
-    if ((event = poll(server_infos->clients, count_pollfds(server_infos->clients), TIMEOUT)) < 0)
+    if ((event = poll(server_infos->clients,
+      count_pollfds(server_infos->clients), TIMEOUT)) < 0)
     {
       perror("poll() failed");
       break ;
