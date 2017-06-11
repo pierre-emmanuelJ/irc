@@ -10,17 +10,26 @@
 
 #include "client.h"
 
+static void agregging_char(t_windows *w, t_client *c, int ch)
+{
+  asprintf(&c->ch, "%c", ch);
+  asprintf(&c->textbox, "%s%s", c->textbox, c->ch);
+  waddstr(w->textbox, c->ch);
+}
+
+static void key_delete(t_windows *w, t_client *c)
+{
+    if (strlen(c->textbox) >= 1)
+      c->textbox[strlen(c->textbox)-1] = 0;
+    mvwdelch(w->textbox, getcury(w->textbox), getcurx(w->textbox)-1);
+}
+
 void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
 {
   t_command *current;
 
-  (void)keybindings;
   if (ch == 127 || ch == 8)
-  {
-    if (strlen(c->textbox) >= 1)
-      c->textbox[strlen(c->textbox)-1] = 0;
-    mvwdelch(w->textbox, getcury(w->textbox), getcurx(w->textbox)-1);
-  }
+    key_delete(w, c);
   else if (ch == 10)
   {
     wprintw(w->body, "%s - %s\n", c->time, c->textbox);
@@ -40,13 +49,14 @@ void keybindings(int ch, t_windows *w, t_client *c, t_command *cmd)
       }
       unknow_command(w, c);
     }
+    if (strcmp(c->channel, "none") && c->st == CONNECTED)
+    {
+      asprintf(&c->tosend, "PRIVMSG %s :%s", c->channel, c->textbox);
+      write(c->socket, c->tosend, strlen(c->tosend));
+    }
     clear_line(w->textbox, c);
   }
   else if (isprint(ch))
-  {
-    asprintf(&c->ch, "%c", ch);
-    asprintf(&c->textbox, "%s%s", c->textbox, c->ch);
-    waddstr(w->textbox, c->ch);
-  }
+    agregging_char(w, c, ch);
   wrefresh (w->textbox);
 }

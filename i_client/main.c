@@ -10,6 +10,23 @@
 
 #include "client.h"
 
+static void reply_ping(t_client *c, t_windows *w)
+{
+  char *str;
+
+  if (strstr(c->receive, "PING :"))
+  {
+    exit(0);
+    str = c->receive;
+    str += 6;
+    asprintf(&c->tosend, "PONG %s\r\n", str);
+    write(c->socket, c->tosend, strlen(c->tosend));
+  }
+  else
+    wprintw(w->body, "%s - %s\n", c->time, c->receive);
+    wrefresh(w->body);
+}
+
 static int custom_read(t_client *c, t_windows *w)
 {
     int   ret;
@@ -21,18 +38,16 @@ static int custom_read(t_client *c, t_windows *w)
   {
     if ((ret = read(c->socket, c->receive, 255)) <= 0)
     {
+      c->st = DISCONNECTED;
+      close_channel(c);
       return (-1);
     }
-    wprintw(w->body, "%s - %s\n", c->time, c->receive);
-  wrefresh(w->body);
-  while (counter < ret)
-  {
-    if (c->receive[counter] == '\n' || c->receive[counter] == '\r')
-      c->receive[counter] = '\0';
-    counter++;
-  }
-  wprintw(w->body, "%s - %s\n", c->time, c->receive);
-  wrefresh(w->body);
+    while (counter < ret)
+    {
+      if (c->receive[counter] == '\n' || c->receive[counter] == '\r')
+          c->receive[counter] = '\0';
+        counter++;
+    }
   }
   return (ret);
 }
@@ -47,6 +62,7 @@ static void   main_process(t_windows *w, t_client *c)
   init_values(c);
   assign_windows(w, c);
   init_body(w, c);
+  wtimeout(w->textbox, 10);
   while (42)
   {
     time_writter(c);
@@ -54,9 +70,13 @@ static void   main_process(t_windows *w, t_client *c)
     keybindings(wgetch(w->textbox), w, c, cmd);
     if (c->st == CONNECTED)
     {
+      FD_ZERO(&(c->fset));
+      FD_SET(c->socket, &(c->fset));
+      c->tm.tv_usec = 100;
       if ((c->ret = select(c->socket + 1, &(c->fset), NULL, NULL, &(c->tm))) == -1)
         return ;
-      custom_read(c, w);
+      if (custom_read(c, w) > -1 && strlen(c->receive) >= 1)
+        reply_ping(c, w);
     }
   }
   destroy_windows(w);

@@ -10,6 +10,16 @@
 
 #include "client.h"
 
+static void         set_user(t_client *c)
+{
+  asprintf(&c->tosend, "NICK %s\r\n", c->nickname);
+  write(c->socket, c->tosend, strlen(c->tosend));
+  asprintf(&c->tosend, "USER %s unknown unknown :noname\r\n", c->nickname);
+  write(c->socket, c->tosend, strlen(c->tosend));
+  write(c->socket, c->ping, strlen(c->ping));
+  asprintf(&c->channel, "none");
+}
+
 static int          resolve_hostname(t_client *c, t_windows *w)
 {
   struct hostent    *pi;
@@ -92,9 +102,7 @@ void                command_server(char *str, t_windows *w, t_client *c)
     wrefresh(w->body);
     c->st = CONNECTED;
     init_select(c);
-    write(c->socket, "NICK bonjour\r\n", strlen("NICK bonjour\r\n"));
-    write(c->socket, "USER bonjour\r\n", strlen("USER bonjour\r\n"));
-    asprintf(&c->channel, "none");
+    set_user(c);
   }
   else
     already_connected(w, c);

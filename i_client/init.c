@@ -34,6 +34,8 @@ void init_values(t_client *c)
   asprintf(&c->textbox, " ");
   asprintf(&c->channel, "none");
   asprintf(&c->ch, " ");
+  asprintf(&c->params, " ");
+  asprintf(&c->ping, "PING :diablox9\r\n");
   c->hostname[0] = 0;
   c->textbox[0] = 0;
   c->ch[0] = 0;

@@ -35,10 +35,10 @@ int       handle_client(t_client *c)
   return (0);
 }
 
-void      close_channel(t_client *c, int nb_socket)
+void      close_channel(t_client *c)
 {
   close(c->socket);
-  if (nb_socket > 0)
-    close(nb_socket);
-  c->port = -1;
+  if (c->socket > 0)
+    close(c->socket);
+  c->socket = -1;
 }

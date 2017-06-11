@@ -12,7 +12,8 @@
 
 void command_join(char *str, t_windows *w, t_client *c)
 {
-  c->params[0] = 0;
+  if (strlen(c->params) >= 1)
+    c->params[0] = 0;
   if (compare_cnts_command(str, "/join ", w, c, 6) == FALSE)
     return ;
   if (c->st == CONNECTED)
@@ -22,10 +23,15 @@ void command_join(char *str, t_windows *w, t_client *c)
       no_parameters(w, c);
       return ;
     }
-    asprintf(&c->tosend, "JOIN #%s", c->params);
+    asprintf(&c->tosend, "JOIN #%s\r\n", c->params);
     write(c->socket, c->tosend, strlen(c->tosend));
     asprintf(&c->channel, "#%s", c->params);
+    wclear(w->body);
+    wprintw(w->body, "%s - %s has joined channel %s\n",
+    c->time, c->nickname, c->channel);
+    wrefresh(w->body);
+
   }
   else
-    not_connect(w, c);
+    need_connection(w, c);
 }
