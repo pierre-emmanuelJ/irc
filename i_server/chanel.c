@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu Jun  8 14:33:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 17:27:47 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:00:12 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -130,7 +130,6 @@ void    remove_cli_from_chanel(const char *chanel_name,
                               t_client_infos *cli)
 {
   int         i;
-  int         save;
   int         found;
   t_chanel    *chan;
 
@@ -144,7 +143,6 @@ void    remove_cli_from_chanel(const char *chanel_name,
   if (found)
     return ;
   chan = &serv->chanels[i];
-  save = i;
   i = 0;
   while (i < MAX_CLI && chan->fds_in_chanel[i] != 0)
   {
