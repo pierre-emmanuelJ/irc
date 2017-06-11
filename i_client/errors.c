@@ -37,3 +37,10 @@ void cant_resolve(t_windows *w, t_client *c)
   c->time, c->ip);
   wrefresh(w->body);
 }
+
+void already_connected(t_windows *w, t_client *c)
+{
+  wprintw(w->body, "%s - ZAPOIRC: You're already connected to a server\n",
+  c->time);
+  wrefresh(w->body);
+}

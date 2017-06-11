@@ -12,7 +12,20 @@
 
 void command_join(char *str, t_windows *w, t_client *c)
 {
-  (void)str;
-  (void)w;
-  (void)c;
+  c->params[0] = 0;
+  if (compare_cnts_command(str, "/join ", w, c, 6) == FALSE)
+    return ;
+  if (c->st == CONNECTED)
+  {
+    if (strlen(c->params) <= 0)
+    {
+      no_parameters(w, c);
+      return ;
+    }
+    asprintf(&c->tosend, "JOIN #%s", c->params);
+    write(c->socket, c->tosend, strlen(c->tosend));
+    asprintf(&c->channel, "#%s", c->params);
+  }
+  else
+    not_connect(w, c);
 }

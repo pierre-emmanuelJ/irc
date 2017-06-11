@@ -15,7 +15,7 @@ static void   refresh_footer(t_windows *w, t_client *c)
   mvwdelch(w->footer, getcury(w->footer), 0);
   wclrtoeol(w->footer);
   mvwprintw(w->footer, 0, 0, "[%s] [%s] [%s]",
-  c->time, c->nickname, c->hostname);
+  c->time, c->nickname, c->channel);
   wrefresh(w->footer);
 }
 
@@ -23,8 +23,12 @@ static void   refresh_header(t_windows *w, t_client *c)
 {
   mvwdelch(w->header, getcury(w->header), 0);
   wclrtoeol(w->header);
-  mvwprintw(w->header, 0, 0, " * ZAPOIIIRC * Connected on %s using %s",
-  c->ip, c->nickname);
+  if (strcmp(c->channel, "none"))
+    mvwprintw(w->header, 0, 0, " * ZAPOIIIRC * Connected on %s",
+  c->ip);
+  else
+    mvwprintw(w->header, 0, 0, " * ZAPOIIIRC * Connected on %s - #%s",
+  c->ip, c->channel);
   wrefresh(w->header);
 }
 

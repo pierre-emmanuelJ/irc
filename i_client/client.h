@@ -58,6 +58,11 @@ typedef struct  s_client {
   fd_set        fset;
   int           port;
   char          *ip;
+  struct timeval tm;
+  int            ret;
+  char           receive[255];
+  char           *tosend;
+  char           *channel;
 }               t_client;
 
 typedef void  (*funcptr)(char *params, t_windows *w, t_client *c);
@@ -76,6 +81,7 @@ void time_writter(t_client *c);
 void init_ncurses(void);
 void init_values(t_client *c);
 void init_body(t_windows *w, t_client *c);
+void init_select(t_client *c);
 
 /* windows.c */
 WINDOW    *create_window(int h, int w, int y, int x);
@@ -113,6 +119,9 @@ void unknow_command(t_windows *w, t_client *c);
 void need_connection(t_windows *w, t_client *c);
 void cant_connect(t_windows *w, t_client *c);
 void cant_resolve(t_windows *w, t_client *c);
+void already_connected(t_windows *w, t_client *c);
+void not_connect(t_windows *w, t_client *c);
+void no_parameters(t_windows *w, t_client *c);
 
 /* refresh.c */
 void refresh_windows(t_windows *w, t_client *c);

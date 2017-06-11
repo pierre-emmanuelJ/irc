@@ -56,7 +56,7 @@ static void         epure_str(char *str, int str_len)
   memmove(str, newstr, strlen(newstr));
 }
 
-static void         split_args(t_client *c, t_windows *w)
+static void         split_args_server(t_client *c, t_windows *w)
 {
   epure_str(c->params, strlen(c->params));
   if (strchr(c->params, ':') != NULL)
@@ -74,18 +74,28 @@ void                command_server(char *str, t_windows *w, t_client *c)
 {
   if (compare_cnts_command(str, "/server" ,w, c, 8) == FALSE)
     return ;
-  split_args(c, w);
-  wprintw(w->body, "%s - Looking up %s on %d\n", c->time, c->ip, c->port);
-  wrefresh(w->body);
-  if (handle_client(c) != 0)
+  if (c->st != CONNECTED)
   {
-    wprintw(w->body, "%s - Unable to connect on %s\n", c->time, c->ip);
-    c->ip = "none\0";
-    c->hostname = "none\0";
+    split_args_server(c, w);
+    wprintw(w->body, "%s - Looking up %s on %d\n", c->time, c->ip, c->port);
     wrefresh(w->body);
-    return ;
+    if (handle_client(c) != 0)
+    {
+      wprintw(w->body, "%s - Unable to connect on %s\n", c->time, c->ip);
+      c->ip = "none\0";
+      c->hostname = "none\0";
+      wrefresh(w->body);
+      return ;
+    }
+    wprintw(w->body, "%s - Connection to %s etablished on port %d\n",
+    c->time, c->ip, c->port);
+    wrefresh(w->body);
+    c->st = CONNECTED;
+    init_select(c);
+    write(c->socket, "NICK bonjour\r\n", strlen("NICK bonjour\r\n"));
+    write(c->socket, "USER bonjour\r\n", strlen("USER bonjour\r\n"));
+    asprintf(&c->channel, "none");
   }
-  wprintw(w->body, "%s - Connection to %s etablished on port %d\n", c->time, c->ip, c->port);
-  wrefresh(w->body);
-  c->st = CONNECTED;
+  else
+    already_connected(w, c);
 }
