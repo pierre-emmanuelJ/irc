@@ -47,6 +47,7 @@ typedef struct  s_windows {
 
 typedef struct  s_client {
   char          *time;
+  char          *ping;
   char          *nickname;
   char          *hostname;
   char          *header;
@@ -132,6 +133,6 @@ BOOL compare_cnts_command(char *s1, char*s2, t_windows *w, t_client *c, int n);
 
 /* init_connection.c */
 int       handle_client(t_client *c);
-void      close_channel(t_client *c, int nb_socket);
+void      close_channel(t_client *c);
 
 #endif /* !CLIENT_IRC_H__ */
