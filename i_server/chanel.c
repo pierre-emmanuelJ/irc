@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu Jun  8 14:33:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 18:00:12 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:59:53 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -23,7 +23,7 @@ void    add_new_chanel(const char *chanel_name,
   if (i == MAX_CLI -1)
     return ;
   printf("chanel in serv %d\n", i);
-  asprintf(&(serv->chanels[i].chanel_name), "%s", chanel_name);
+  xasprintf(&(serv->chanels[i].chanel_name), "%s", chanel_name);
   serv->chanels[i].fds_in_chanel = vmalloc(sizeof(int) * MAX_CLI);
   memset(serv->chanels[i].fds_in_chanel, 0, sizeof(int) * MAX_CLI);
   serv->chanels[i].fds_in_chanel[0] = cli->pollfd->fd;

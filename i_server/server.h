@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 14:54:01 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:59:18 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -26,6 +26,7 @@
 # include <signal.h>
 # include <poll.h>
 # include <ctype.h>
+# include <stdarg.h>
 
 /*
 ** See feature_test_macros(7)
@@ -116,6 +117,7 @@ BOOL     is_number(char *number);
 /*
 ** server utiles
 */
+int      xasprintf(char **strp, const char *fmt, ...);
 BOOL     create_socket(t_server_infos *);
 BOOL     server_listen(t_server_infos *);
 BOOL     server_accept(t_server_infos *, t_client_infos *);

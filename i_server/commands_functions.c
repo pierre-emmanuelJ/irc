@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 16:43:46 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 18:59:54 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -38,7 +38,7 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
   if (cli->nickname)
     {
       printf("%s\n", "second");
-      asprintf(&msg, ":%s NICK %s", cli->nickname,  command[1]);
+      xasprintf(&msg, ":%s NICK %s", cli->nickname,  command[1]);
       while (i < MAX_CLI && cli->chanels[i])
       {
         send_msg_to_chanel(cli->chanels[i], msg, cli);
@@ -47,11 +47,11 @@ BOOL     nick_command(char **command, t_server_infos *serv, t_client_infos *cli)
       send_str_to_client(cli->client_fd, msg);
       free(msg);
       free(cli->nickname);
-      asprintf(&cli->nickname, "%s", command[1]);
+      xasprintf(&cli->nickname, "%s", command[1]);
       return (TRUE);
     }
   printf("%s\n", "first");
-  asprintf(&cli->nickname, "%s", command[1]);
+  xasprintf(&cli->nickname, "%s", command[1]);
   return (TRUE);
 }
 
@@ -68,11 +68,11 @@ BOOL     user_command(char **command, t_server_infos *serv, t_client_infos *cli)
   if (!cli->user)
   {
     send_str_to_client(cli->client_fd, "001 :Welcome");
-    asprintf(&cli->user, "%s", command[1]);
+    xasprintf(&cli->user, "%s", command[1]);
     return (TRUE);
   }
   free(cli->user);
-  asprintf(&cli->user, "%s", command[1]);
+  xasprintf(&cli->user, "%s", command[1]);
   return (TRUE);
 }
 
@@ -88,7 +88,7 @@ BOOL     ping_command(char **command, t_server_infos *serv, t_client_infos *cli)
     send_str_to_client(cli->client_fd, "304 :SYNTAX PING <servername> [:<servername>]");
     return (FALSE);
   }
-  asprintf(&str, "PONG :%s", command[1]);
+  xasprintf(&str, "PONG :%s", command[1]);
   send_str_to_client(cli->client_fd, str);
   free(str);
   return (TRUE);
@@ -159,10 +159,10 @@ void    send_msg_to_priv_cli(char **command, t_server_infos *serv, t_client_info
 
   if ((fd = find_user_by_nick(command[1], serv)) == -1)
   {
-    asprintf(&msg, "401 %s %s :No such nick/channel", cli->nickname, command[2]);
+    xasprintf(&msg, "401 %s %s :No such nick/channel", cli->nickname, command[2]);
     return ;
   }
-  asprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, command[1], command[2]);
+  xasprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, command[1], command[2]);
   send_str_to_client(fd, msg);
   free(msg);
 }
@@ -190,7 +190,7 @@ BOOL     privmsg_command(char **command, t_server_infos *serv, t_client_infos *c
   {
     if (!strcmp(cli->chanels[i]->chanel_name, command[1]))
     {
-      asprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, cli->chanels[i]->chanel_name, command[2]);
+      xasprintf(&msg, ":%s PRIVMSG %s %s", cli->nickname, cli->chanels[i]->chanel_name, command[2]);
       send_msg_to_chanel(cli->chanels[i], msg, cli);
       free(msg);
     }
@@ -221,7 +221,7 @@ BOOL          join_command(char **command, t_server_infos *serv, t_client_infos 
     printf("chanel NOT exist\n");
     add_new_chanel(command[1], serv, cli);
   }
-  asprintf(&msg, ":%s JOIN %s", cli->nickname, command[1]);
+  xasprintf(&msg, ":%s JOIN %s", cli->nickname, command[1]);
   if ((chan = chanel_exist(command[1], serv)))
   {
     send_msg_to_chanel(chan, msg, cli);
@@ -244,7 +244,7 @@ BOOL          part_command(char **command, t_server_infos *serv, t_client_infos 
   }
   if ((chan = chanel_exist(command[1], serv)))
   {
-    asprintf(&msg, ":%s PART %s", cli->nickname, command[1]);
+    xasprintf(&msg, ":%s PART %s", cli->nickname, command[1]);
     send_msg_to_chanel(chan, msg, cli);
     send_str_to_client(cli->client_fd, msg);
     printf("..............%s\n", msg);
