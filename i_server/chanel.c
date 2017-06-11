@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Thu Jun  8 14:33:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 21:30:54 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:40:26 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ void            add_new_chanel(const char *chanel_name,
   i = 0;
   while (i < MAX_CLI && serv->chanels[i].chanel_name)
     i++;
-  if (i == MAX_CLI -1)
+  if (i == MAX_CLI - 1)
     return ;
   xasprintf(&(serv->chanels[i].chanel_name), "%s", chanel_name);
   serv->chanels[i].fds_in_chanel = vmalloc(sizeof(int) * MAX_CLI);
@@ -30,7 +30,7 @@ void            add_new_chanel(const char *chanel_name,
   i = 0;
   while (i < MAX_CLI && cli->chanels[i])
     i++;
-  if (i == MAX_CLI -1)
+  if (i == MAX_CLI - 1)
     return ;
   cli->chanels[i] = chan;
 }
@@ -42,18 +42,18 @@ static void     add_chanel_to_cli_list(t_client_infos *cli, t_chanel *chan)
   i = 0;
   while (i < MAX_CLI && cli->chanels[i])
     i++;
-  if (i == MAX_CLI -1)
+  if (i == MAX_CLI - 1)
     return ;
   cli->chanels[i] = chan;
 }
 
-void          add_cli_to_chanel(const char *chanel_name,
-                                t_server_infos *serv,
-                                t_client_infos *cli)
+void            add_cli_to_chanel(const char *chanel_name,
+                                  t_server_infos *serv,
+                                  t_client_infos *cli)
 {
-  int         i;
-  int         found;
-  t_chanel    *chan;
+  int           i;
+  int           found;
+  t_chanel      *chan;
 
   i = 0;
   while (i < MAX_CLI)
@@ -67,11 +67,8 @@ void          add_cli_to_chanel(const char *chanel_name,
   chan = &serv->chanels[i];
   i = 0;
   while (i < MAX_CLI && chan->fds_in_chanel[i] > 0)
-  {
-    printf("%d\n", chan->fds_in_chanel[i]);
     i++;
-  }
-  if (i == MAX_CLI -1)
+  if (i == MAX_CLI - 1)
     return ;
   chan->fds_in_chanel[i] = cli->client_fd;
   add_chanel_to_cli_list(cli, chan);
@@ -85,7 +82,7 @@ void    remove_chanel_from_cli_list(t_chanel *chan,
   i = 0;
   while (i < MAX_CLI && cli->chanels[i] != chan)
     i++;
-  if (i == MAX_CLI -1)
+  if (i == MAX_CLI - 1)
     return ;
   memcpy(cli->chanels + i, cli->chanels + i + 1, MAX_CLI - i);
   i = 0;

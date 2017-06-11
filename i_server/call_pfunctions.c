@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 16:57:32 2017 Pierre-Emmanuel Jacquier
-** Last update Sat Jun 10 19:24:32 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:37:20 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -25,16 +25,31 @@ void    init_tpsf_tab(t_pf *pf)
   pf->commands[8] = &list_command;
 }
 
-BOOL    call_function(t_pf *pf, char **command,
-                      t_server_infos *serv_infos,
-                      t_client_infos *cli_infos)
+void    init_command_tab(t_commands_tab *tab)
 {
-  int   i;
+  sprintf(tab->tab[0], "NICK");
+  sprintf(tab->tab[1], "USER");
+  sprintf(tab->tab[2], "PING");
+  sprintf(tab->tab[3], "PONG");
+  sprintf(tab->tab[4], "QUIT");
+  sprintf(tab->tab[5], "PRIVMSG");
+  sprintf(tab->tab[6], "JOIN");
+  sprintf(tab->tab[7], "PART");
+  sprintf(tab->tab[8], "LIST");
+}
+
+BOOL                    call_function(t_pf *pf, char **command,
+                                      t_server_infos *serv_infos,
+                                      t_client_infos *cli_infos)
+{
+  int                   i;
+  t_commands_tab        tab;
 
   i = 0;
+  init_command_tab(&tab);
   while (i < NB_COMMANDS)
   {
-    if (!strcmp(command[0], g_commands_list[i]))
+    if (!strcmp(command[0], tab.tab[i]))
     {
       if (pf->commands[i](command, serv_infos, cli_infos))
         return (FALSE);

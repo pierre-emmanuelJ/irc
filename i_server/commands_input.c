@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun Jun 11 20:09:47 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 20:23:08 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:39:42 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -65,7 +65,7 @@ BOOL    exec_command(char *command,
 }
 
 static void     exec_lines(t_server_infos *serv,
-                           struct pollfd  *pollfd,
+                           struct pollfd *pollfd,
                            t_client_infos *cli)
 {
   char          **lines;
@@ -76,8 +76,6 @@ static void     exec_lines(t_server_infos *serv,
   while (*lines)
   {
     remove_crlf(*lines);
-    printf("commande : %s\n", *lines);
-    fflush(stdout);
     epure_str(*lines, strlen(*lines));
     add_in_cbuf(&serv->cbuf, pollfd, cli, *lines);
     lines++;

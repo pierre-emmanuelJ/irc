@@ -5,11 +5,11 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 21:25:13 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:30:58 2017 Pierre-Emmanuel Jacquier
 */
 
-#ifndef MYIRC_H_
-# define MYIRC_H_
+#ifndef SERVER_H_
+# define SERVER_H_
 
 # define _GNU_SOURCE
 
@@ -38,7 +38,6 @@
 # define MAX_CLI (1024)
 # define BOOL t_bool
 # define TIMEOUT (3 * 60 * 1000)
-# define NB_COMMANDS (9)
 
 /*
 ** yan typedef socklen_t
@@ -48,11 +47,11 @@
 ** yan typedef BOOL
 */
 
-typedef enum s_bool
+typedef enum    s_bool
 {
   FALSE,
   TRUE
-}            t_bool;
+}               t_bool;
 
 typedef struct          s_chanel
 {
@@ -100,19 +99,19 @@ typedef struct          s_server_infos
   char                  *input;
 }                       t_server_infos;
 
-typedef struct          end_prg
+typedef struct          s_end_prg
 {
   struct pollfd         *pollfds;
   t_circular_buf        *cbuf;
 }                       t_end_prg;
 
-extern t_end_prg    g_end_prg;
+extern t_end_prg        g_end_prg;
 
 /*
 ** utils functions
 */
-void     *vmalloc(size_t size);
-BOOL     is_number(char *number);
+void    *vmalloc(size_t size);
+BOOL    is_number(char *number);
 
 /*
 ** server utiles
@@ -168,4 +167,4 @@ void            send_msg_to_chanel(t_chanel *chan,
                                    char *msg,
                                    t_client_infos *cli);
 
-#endif /* !MYIRC_H_ */
+#endif /* !SERVER_H_ */

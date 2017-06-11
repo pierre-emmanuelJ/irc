@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed Jun  7 19:08:21 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 21:17:40 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:18:07 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -28,7 +28,7 @@ BOOL    nick_command(char **command,
   }
   if (cli->nickname)
     {
-      xasprintf(&msg, ":%s NICK %s", cli->nickname,  command[1]);
+      xasprintf(&msg, ":%s NICK %s", cli->nickname, command[1]);
       while (i < MAX_CLI && cli->chanels[i])
         send_msg_to_chanel(cli->chanels[i++], msg, cli);
       send_str_to_client(cli->client_fd, msg);

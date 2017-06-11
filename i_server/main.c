@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 21:21:15 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:16:17 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -79,7 +79,7 @@ static BOOL     commons(t_server_infos *server_infos)
 
 static void     ctrl_c()
 {
-  int i;
+  int           i;
 
   i = 0;
   while (g_end_prg.pollfds[i].fd != 0)

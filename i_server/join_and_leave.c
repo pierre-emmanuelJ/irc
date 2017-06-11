@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Sun Jun 11 21:17:27 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 21:17:48 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 22:24:24 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -60,9 +60,9 @@ BOOL            part_command(char **command,
   return (TRUE);
 }
 
-BOOL     list_command(char **command,
-                      t_server_infos *serv,
-                      t_client_infos *cli)
+BOOL    list_command(char **command,
+                     t_server_infos *serv,
+                     t_client_infos *cli)
 {
   (void)command;
   (void)serv;
