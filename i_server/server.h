@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:59:09 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 19:23:46 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 20:12:11 2017 Pierre-Emmanuel Jacquier
 */
 
 #ifndef MYIRC_H_
@@ -117,6 +117,7 @@ BOOL     is_number(char *number);
 /*
 ** server utiles
 */
+size_t   count_pollfds(struct pollfd *fds);
 int      tab_len(char **tab);
 int      xasprintf(char **strp, const char *fmt, ...);
 BOOL     create_socket(t_server_infos *);

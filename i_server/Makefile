@@ -5,7 +5,7 @@
 ## Login   <jacqui_p@epitech.eu>
 ##
 ## Started on  Wed May 24 14:00:55 2017 Pierre-Emmanuel Jacquier
-## Last update Thu Jun  8 17:58:04 2017 Pierre-Emmanuel Jacquier
+## Last update Sun Jun 11 20:14:22 2017 Pierre-Emmanuel Jacquier
 ##
 
 CC = gcc
@@ -23,7 +23,9 @@ SRC	= main.c \
       utils_funcs.c \
       call_pfunctions.c \
       commands_functions.c \
-      chanel.c
+      chanel.c \
+      server_utils.c \
+      commands_input.c
 
 OBJS = $(SRC:.c=.o)
 
