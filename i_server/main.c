@@ -5,7 +5,7 @@
 ** Login   <jacqui_p@epitech.eu>
 **
 ** Started on  Wed May 31 14:58:45 2017 Pierre-Emmanuel Jacquier
-** Last update Sun Jun 11 22:58:29 2017 Pierre-Emmanuel Jacquier
+** Last update Sun Jun 11 23:00:13 2017 Pierre-Emmanuel Jacquier
 */
 
 #include "server.h"
@@ -100,7 +100,7 @@ int                     main(int argc, char **argv)
 
   if (argc != 2 || !is_number(argv[1]))
   {
-    fprintf(stderr, "USAGE: ./server port\n");
+    fprintf(stderr, "USAGE: %s port\n", argv[0]);
     exit(FAILURE);
   }
   signal(SIGINT, ctrl_c);
